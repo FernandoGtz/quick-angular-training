@@ -1,0 +1,22 @@
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Lista de Socios</h2>
+  @if (partners$ | async; as partners) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (partner of partners; track partner.id) {
+        <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+          <h3>Nombre: {{ partner.name }}</h3>
+          <p>Email. {{ partner.email }}</p>
+          <p>Fecha de nacimiento: {{ partner.bornDate }}</p>
+          <p>Género: {{ partner.gender }}</p>
+          <p>Cellphone: {{ partner.cellphoneNumber }}</p>
+        </div>
+      } @empty {
+        <p class="text-gray-500 col-span-full">No hay socios registrados aún.</p>
+      }
+    </div>
+  } @else {
+    <div class="flex justify-center p-8">
+      <p class="text-blue-500 font-semibold animate-pulse">Cargando datos...</p>
+    </div>
+  }
+</div>
