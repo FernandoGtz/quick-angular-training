@@ -1,11 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-partner-form',
   imports: [ReactiveFormsModule],
   templateUrl: './partner-form.component.html',
+  standalone: true,
 })
 export class PartnerFormComponent implements OnInit {
   // Inyeccion del servicio y el formulario
@@ -48,7 +50,7 @@ export class PartnerFormComponent implements OnInit {
         const bornDateAsDate = new Date(year, month - 1, day);
 
         // Reemplazamos el valor en el payload
-        const payload = { ...formData, bornDate: bornDateAsDate, };
+        const payload = { ...formData, bornDate: bornDateAsDate };
 
         const docId = await this.partnerService.createPartner(payload);
 

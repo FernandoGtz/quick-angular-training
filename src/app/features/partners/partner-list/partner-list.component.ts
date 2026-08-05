@@ -8,6 +8,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-partner-list',
   imports: [AsyncPipe],
   templateUrl: './partner-list.component.html',
+  standalone: true,
 })
 export class PartnerListComponent implements OnInit {
   // Inyeccion del servicio

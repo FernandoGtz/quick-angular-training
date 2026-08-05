@@ -1,30 +1,29 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
 
 // Importaciones de metodos modulares de firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { provideAuth, getAuth } from '@angular/fire/auth';
+import { getAuth, provideAuth } from '@angular/fire/auth';
 
-import { routes } from './app.routes';
+const firebaseConfig = {
+  apiKey: 'AIzaSyA48BQ2n_ShqUZsEaW6lq5dtfHZG7PP5ZY',
+  authDomain: 'gym-bmg-system.firebaseapp.com',
+  projectId: 'gym-bmg-system',
+  storageBucket: 'gym-bmg-system.firebasestorage.app',
+  messagingSenderId: '290738974296',
+  appId: '1:290738974296:web:e090c6923143793a9d242d',
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideFirebaseApp(() =>
-      initializeApp({
-        projectId: 'tu-project-id',
-        appId: 'tu-app-id',
-        storageBucket: 'tu-bucket',
-        apiKey: 'tu-api-key',
-        authDomain: 'tu-domain',
-        messagingSenderId: 'tu-sender-id',
-      }),
-    ),
-
-    // Inyección de Firestore
+    provideRouter(routes),
+    // Inicializamos la app de Firebase
+    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    // Inicializamos el servicio de Firestore
     provideFirestore(() => getFirestore()),
-
-    // Inyección de Autenticación
+    // Inicializamos el servicio de autenticacion de firebase
     provideAuth(() => getAuth()),
   ],
 };

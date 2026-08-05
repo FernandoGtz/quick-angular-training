@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PartnerService } from '../../../core/services/partner.service';
-import { Training, TrainingView } from '../../../core/models/training.model';
+import { TrainingView } from '../../../core/models/training.model';
 import { combineLatest, map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { TrainingService } from '../../../core/services/training.service';
@@ -10,6 +10,7 @@ import { ExerciseService } from '../../../core/services/exercise.service';
   selector: 'app-training-list',
   imports: [AsyncPipe],
   templateUrl: './training-list.component.html',
+  standalone: true,
 })
 export class TrainingListComponent implements OnInit {
   // Inyeccion del servicio
