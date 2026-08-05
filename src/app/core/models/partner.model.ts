@@ -7,5 +7,6 @@ export interface Partner {
   gender: Gender;
   cellphoneNumber: number;
   email: string;
+  isActive: boolean;
 }
 

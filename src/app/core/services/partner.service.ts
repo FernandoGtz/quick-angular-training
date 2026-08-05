@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, query, getDocs, doc, deleteDoc, where, collectionData, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Partner } from '../models/partner.model';
 import { Observable } from 'rxjs';
+import { Training } from '../models/training.model';
 
 
 @Injectable({
@@ -12,15 +13,14 @@ export class PartnerService {
   private firestore: Firestore = inject(Firestore);
 
   // Operacion Create
-  async createPartner(partner: Omit<Partner, 'id'>): Promise<string> {
+  async createPartner(partner: Omit<Partner, 'id' | 'isActive'>): Promise<string> {
     try {
       // Se crea una referencia de la coleccion donde vamos a guardar el partner
       const collectionRef = collection(this.firestore, 'partners');
-
-      // Se añade un nuevo documento formado por el modelo partner dentro de su respectiva coleccion
-      const documentRef = await addDoc(collectionRef, partner);
+      const payload = { ...partner, isActive: true };
 
       // Retornamos el id que sea para el documento
+      const documentRef = await addDoc(collectionRef, payload);
       return documentRef.id;
     } catch (error) {
       console.error(error);
@@ -31,6 +31,61 @@ export class PartnerService {
   // Operacion Read
   getPartners(): Observable<Partner[]> {
     const collectionRef = collection(this.firestore, 'partners');
-    return collectionData(collectionRef, {idField: 'id'}) as Observable<Partner[]>;
+    const q = query(collectionRef, where('isActive', '==', true));
+    return collectionData(q, { idField: 'id' }) as Observable<Partner[]>;
+  }
+
+  async getPartnerById(id: string): Promise<Partner | undefined> {
+    try {
+      const partnerSnap = await getDoc(doc(this.firestore, 'partners', id));
+      if (partnerSnap.exists()) {
+        // Extraemos los datos y le inyectamos manualmente el ID del snapshot
+        return { id: partnerSnap.id, ...partnerSnap.data() } as Partner;
+      } else {
+        console.error(`No se encontró el socio con id: ${id}`);
+        return undefined;
+      }
+    } catch (error) {
+      console.error('Error al obtener el socio:', error);
+      throw error;
+    }
+  }
+
+  async updatePartner(id: string, data: Partial<Omit<Partner, 'id' | 'isActive'>>): Promise<void> {
+    try {
+      // Buscamos la referencia del documento en la colección de partners para actualizarlo directamente
+      const partnerRef = doc(this.firestore, 'partners', id);
+      await updateDoc(partnerRef, data);
+      console.log(`Socio actualizado.`);
+    } catch (error) {
+      console.error('Error al intentar actualizar el socio', error);
+      throw error;
+    }
+  }
+
+  async deletePartner(id: string): Promise<void> {
+    try {
+      // Buscamos la referencia del documento en la colección de entrenamientos
+      const trainingRef = collection(this.firestore, 'trainings');
+
+      // Construimos  y ejecutamos la query
+      const q = query(trainingRef, where('partnerId', '==', id));
+      const querySnapshot = await getDocs(q);
+
+      // Buscamos la referencia de los documentos que queremos modificar
+      const partnerRef = doc(this.firestore, 'partners', id);
+
+      if (querySnapshot.empty) {
+        // Si no hay entrenamientos asociados a un partner, eliminamos el documento
+        await deleteDoc(partnerRef);
+        console.log(partnerRef, 'Fue borrado correctamente');
+      } else {
+        // Bloqueamos la operacion si hay entrenamientos asociados a un partner
+        console.log('No se puede eliminar el partner porque tiene entrenamientos asociados.');
+      }
+    } catch (error) {
+      console.error('Error al intentar borrar al socio', error);
+      throw error;
+    }
   }
 }
