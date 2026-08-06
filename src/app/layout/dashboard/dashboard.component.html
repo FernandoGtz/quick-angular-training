@@ -1,0 +1,55 @@
+<div class="flex h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="w-64 min-h-screen bg-slate-900 text-white flex flex-col px-1 py-4 gap-2">
+    <!-- Logo -->
+    <div class="flex items-center gap-2 px-6 py-6">
+      <img src="logo.png" class="w-8 h-8 rounded-full" alt="logo" />
+      <span class="text-white font-semibold text-3xl">Gym App</span>
+    </div>
+
+    <!-- Opciones de navegacion -->
+    <nav class="flex-1 p-4 space-y-2">
+      <a routerLink="trainings" routerLinkActive="bg-slate-700 text-white"
+         class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">
+        <i class="ti ti-barbell text-lg"></i>
+        Entrenamientos
+      </a>
+      <a routerLink="exercises" routerLinkActive="bg-slate-700 text-white"
+         class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">
+        <i class="ti ti-dumbbell text-lg"></i>
+        Ejercicios
+      </a>
+      <a routerLink="partners" routerLinkActive="bg-slate-700 text-white"
+         class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">
+        <i class="ti ti-users text-lg"></i>
+        Socios
+      </a>
+    </nav>
+
+    <div class="w-full flex items-center justify-center gap-2 px-4 py-2 mt-auto">
+      <button type="submit" (click)="logout()"
+        class="flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-950 hover:text-red-300 transition-colors w-full">
+        <i class="ti ti-logout text-lg"></i>
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Header consistente -->
+    <div class="bg-white border-b border-slate-200 px-6 pt-6 pb-0">
+      <h1 class="text-3xl font-bold text-slate-800 mb-4">
+        Sistema de Administración de Entrenamientos
+      </h1>
+      <app-filter-bar />
+    </div>
+
+    <!-- Contenido -->
+    <div class="p-6 flex-1 overflow-auto">
+      <router-outlet />
+    </div>
+
+  </main>
+</div>
