@@ -4,10 +4,10 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: true,
   selector: 'app-login',
   imports: [ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  standalone: true,
+  templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
   // Inyeccion de servicio, formulario y enrutador

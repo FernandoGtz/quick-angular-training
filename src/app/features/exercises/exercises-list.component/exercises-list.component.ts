@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-exercises-list.component',
   imports: [AsyncPipe],
-  templateUrl: './exercises-list.component.html',
-  standalone: true,
+  templateUrl: './exercises-list.component.html'
 })
 export class ExercisesListComponent implements OnInit {
   // Inyeccion del servicio

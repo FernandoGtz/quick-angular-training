@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { GenderPipe } from '../../../core/pipes/gender.pipe';
 
 @Component({
-  selector: 'app-partner-form',
-  imports: [ReactiveFormsModule],
-  templateUrl: './partner-form.component.html',
   standalone: true,
+  selector: 'app-partner-form',
+  imports: [ReactiveFormsModule, GenderPipe],
+  templateUrl: './partner-form.component.html'
 })
 export class PartnerFormComponent implements OnInit {
   // Inyeccion del servicio y el formulario
@@ -30,11 +30,7 @@ export class PartnerFormComponent implements OnInit {
   }
 
   // Arreglo auxiliar para mejor legibilidad de los generos en el select
-  genderOptions = [
-    { value: 'MALE', label: 'Masculino' },
-    { value: 'FEMALE', label: 'Femenino' },
-    { value: 'NON', label: 'No Especificado' },
-  ];
+  genderOptions = ['MALE', 'FEMALE', 'NON'];
 
   // Metodo para el envio del formulario
   async onSubmit() {

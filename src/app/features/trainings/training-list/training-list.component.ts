@@ -5,12 +5,13 @@ import { combineLatest, map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { TrainingService } from '../../../core/services/training.service';
 import { ExerciseService } from '../../../core/services/exercise.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-training-list',
-  imports: [AsyncPipe],
-  templateUrl: './training-list.component.html',
   standalone: true,
+  selector: 'app-training-list',
+  imports: [AsyncPipe, RouterLink, ],
+  templateUrl: './training-list.component.html',
 })
 export class TrainingListComponent implements OnInit {
   // Inyeccion del servicio
@@ -47,5 +48,18 @@ export class TrainingListComponent implements OnInit {
         });
       }),
     );
+  }
+
+  async deleteTraining(id: string){
+    const confirm = window.confirm('¿Estás seguro de borrar este entrenamiento?');
+
+    if (confirm) {
+      try {
+        this.trainingService.deleteTraining(id);
+        console.log('Eliminado');
+      } catch (error) {
+        console.log('Error al borrar el entrenamiento:', error);
+      }
+    }
   }
 }

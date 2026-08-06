@@ -2,13 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PartnerService } from '../../../core/services/partner.service';
 import { Partner } from '../../../core/models/partner.model';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
+import { GenderPipe } from '../../../core/pipes/gender.pipe';
 
 @Component({
-  selector: 'app-partner-list',
-  imports: [AsyncPipe],
-  templateUrl: './partner-list.component.html',
   standalone: true,
+  selector: 'app-partner-list',
+  imports: [AsyncPipe, DatePipe, GenderPipe],
+  templateUrl: './partner-list.component.html'
 })
 export class PartnerListComponent implements OnInit {
   // Inyeccion del servicio

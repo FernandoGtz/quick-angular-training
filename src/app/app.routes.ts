@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './features/layout/dashboard.component/dashboard.component';
+import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { PartnerListComponent } from './features/partners/partner-list/partner-list.component';
 import { PartnerFormComponent } from './features/partners/partner-form/partner-form.component';
 import { TrainingListComponent } from './features/trainings/training-list/training-list.component';

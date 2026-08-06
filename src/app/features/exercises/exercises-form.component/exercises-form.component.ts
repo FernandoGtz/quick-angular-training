@@ -3,10 +3,10 @@ import { ExerciseService } from '../../../core/services/exercise.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'app-exercises-form.component',
   imports: [ReactiveFormsModule, FormsModule],
-  templateUrl: './exercises-form.component.html',
-  standalone: true,
+  templateUrl: './exercises-form.component.html'
 })
 export class ExercisesFormComponent implements OnInit {
   // Inyeccion del servicio y el formulario
