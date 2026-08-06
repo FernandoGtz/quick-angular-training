@@ -62,7 +62,7 @@ export class TrainingFormComponent implements OnInit {
         if (this.isEditMode) {
           // Se realiza la actualizacion del documento partiendo del id y los valores del formulario
           await this.trainingService.updateTraining(this.currentId, this.trainingForm.value);
-          console.log('Actualizado: ');
+          console.log('Actualizado.');
         } else {
           // Asignamos la fecha de creacion al payload
           const createdAt = new Date();

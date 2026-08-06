@@ -1,14 +1,42 @@
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 h-full p-8">
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 min-h-full p-8">
   <h2 class="text-2xl font-bold mb-4 text-slate-800"> Lista de Socios</h2>
   @if (partners$ | async; as partners) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       @for (partner of partners; track partner.id) {
-        <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200">
-          <h3>Nombre: {{ partner.name }}</h3>
-          <p>Email: {{ partner.email }}</p>
-          <p>Fecha de nacimiento: {{ partner.bornDate?.toDate() | date:'dd/MM/yyyy' }}</p>
-          <p>Género: {{ partner.gender | gender }}</p>
-          <p>Celular: {{ partner.cellphoneNumber }}</p>
+        <div class="flex flex-col hover:shadow-lg transition-shadow duration-200 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+          <div>
+            <p class="text-sm font-medium text-gray-500">Nombre:
+              <span class="text-base font-semibold text-gray-900 block">{{ partner.name }}</span>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Email:
+              <span class="text-base font-semibold text-gray-900 block">{{ partner.email }}</span>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Fecha de nacimiento:
+              <span class="text-base font-semibold text-gray-900 block">{{ partner.bornDate?.toDate() | date:'dd/MM/yyyy' }}</span>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Género:
+              <span class="text-base font-semibold text-gray-900 block">{{ partner.gender | gender }}</span>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500">Celular:
+              <span class="text-base font-semibold text-gray-900 block">{{ partner.cellphoneNumber }}</span>
+            </p>
+          </div>
+          <div class="mt-auto pt-4 flex gap-2 justify-end ">
+            <a class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+                    bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800"
+               [routerLink]="['/partners/edit', partner.id]">Editar</a>
+            <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+                    bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
+                    type="button" (click)="deletePartner(partner.id)">Borrar</button>
+          </div>
         </div>
       } @empty {
         <p class="text-gray-500 col-span-full">No hay socios registrados aún.</p>

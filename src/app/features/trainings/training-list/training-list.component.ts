@@ -58,7 +58,7 @@ export class TrainingListComponent implements OnInit {
         this.trainingService.deleteTraining(id);
         console.log('Eliminado');
       } catch (error) {
-        console.log('Error al borrar el entrenamiento:', error);
+        console.log('Error al borrar el entrenamiento: ', error);
       }
     }
   }

@@ -3,11 +3,12 @@ import { ExerciseService } from '../../../core/services/exercise.service';
 import { Exercise } from '../../../core/models/exercise.model';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-exercises-list.component',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './exercises-list.component.html'
 })
 export class ExercisesListComponent implements OnInit {
@@ -20,5 +21,18 @@ export class ExercisesListComponent implements OnInit {
   ngOnInit() {
     // Inicializacion
     this.exercises$ = this.exercisesService.getExercises();
+  }
+
+  async deleteExercise(id: string): Promise<void> {
+    const confirm = window.confirm('¿Estás seguro de borrar este ejercicio?');
+
+    if (confirm) {
+      try {
+        this.exercisesService.deleteExercise(id);
+        console.log('Ejercicio eliminado');
+      } catch (error) {
+        console.log('Error al borrar el ejercicio: ', error);
+      }
+    }
   }
 }

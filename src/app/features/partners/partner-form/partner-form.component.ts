@@ -2,6 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
 import { GenderPipe } from '../../../core/pipes/gender.pipe';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Training } from '../../../core/models/training.model';
+import { Partner } from '../../../core/models/partner.model';
 
 @Component({
   standalone: true,
@@ -13,9 +16,12 @@ export class PartnerFormComponent implements OnInit {
   // Inyeccion del servicio y el formulario
   private partnerService = inject(PartnerService);
   private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute)
 
   // Formulario reactivo
   public partnerForm!: FormGroup;
+  public currentId: string | null = null;
+  public isEditMode: boolean = false;
 
   // Inicializacion del formulario
   ngOnInit() {
@@ -27,6 +33,19 @@ export class PartnerFormComponent implements OnInit {
       gender: ['', Validators.required],
       bornDate: ['', Validators.required],
     });
+    this.currentId = this.route.snapshot.paramMap.get('id');
+    if (this.currentId) {
+      this.isEditMode = true;
+      this.partnerService.getPartnerById(this.currentId).then((partner: Partner) => {
+        if (partner) {
+          this.partnerForm.patchValue(partner);
+        } else {
+          console.error('Socio no encontrado.');
+        }
+      }).catch((error) => {
+        console.error('Error conectando a firestore', error)
+      })
+    }
   }
 
   // Arreglo auxiliar para mejor legibilidad de los generos en el select
@@ -40,17 +59,23 @@ export class PartnerFormComponent implements OnInit {
         // Llamada al servicio para crear el partner
         const formData = this.partnerForm.value;
 
-        // Convertimos la fecha de nacimiento de string a Date
-        const dateString = formData.bornDate;
-        const [year, month, day] = dateString.split('-').map(Number);
-        const bornDateAsDate = new Date(year, month - 1, day);
+        if (this.isEditMode) {
+          // Actualizamos el documento partiendo del id del socio
+          await this.partnerService.updatePartner(this.currentId, this.partnerForm.value);
+          console.log('Actualizado.')
+        } else {
+          // Convertimos la fecha de nacimiento de string a Date
+          const dateString = formData.bornDate;
+          const [year, month, day] = dateString.split('-').map(Number);
+          const bornDateAsDate = new Date(year, month - 1, day);
 
-        // Reemplazamos el valor en el payload
-        const payload = { ...formData, bornDate: bornDateAsDate };
+          // Reemplazamos el valor en el payload
+          const payload = { ...formData, bornDate: bornDateAsDate };
 
-        const docId = await this.partnerService.createPartner(payload);
-
-        console.log('Creado', docId);
+          const docId = await this.partnerService.createPartner(payload);
+          console.log('Creado', docId);
+        }
+        // Limpiamos el formulario
         this.partnerForm.reset();
       } catch (error) {
         console.error('Problema al contactar con Firestore:', error);

@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ExerciseService } from '../../../core/services/exercise.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Exercise } from '../../../core/models/exercise.model';
 
 @Component({
   standalone: true,
@@ -10,11 +12,14 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 })
 export class ExercisesFormComponent implements OnInit {
   // Inyeccion del servicio y el formulario
-  private exerciseServices = inject(ExerciseService);
+  private exerciseService = inject(ExerciseService);
   private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute)
 
   //Formulario reactivo
   public exerciseForm!: FormGroup;
+  public currentId: string | null = null;
+  public isEditMode: boolean = false;
 
   ngOnInit() {
     // Inicializacion del formulario
@@ -22,6 +27,19 @@ export class ExercisesFormComponent implements OnInit {
       name: ['', Validators.required],
       targetMuscle: ['', Validators.required],
     });
+    this.currentId = this.route.snapshot.paramMap.get('id');
+    if (this.currentId) {
+      this.isEditMode = true;
+      this.exerciseService.getExerciseById(this.currentId).then((exercise: Exercise) => {
+        if (exercise) {
+          this.exerciseForm.patchValue(exercise);
+        } else {
+          console.error('Ejercicio no encontrado: ', exercise);
+        }
+      }).catch((error) => {
+        console.error('Error conectando a firestore', error);
+      })
+    }
   }
 
   async onSubmit() {
@@ -31,8 +49,13 @@ export class ExercisesFormComponent implements OnInit {
         // Llamada al servicio para crear el ejercicio
         const formData = this.exerciseForm.value;
 
-        const docId = await this.exerciseServices.createExercise(formData);
-        console.log('Creado: ', docId);
+        if (this.isEditMode) {
+          await this.exerciseService.updateExercise(this.currentId, this.exerciseForm.value);
+          console.log('Actualizado');
+        } else {
+          const docId = await this.exerciseService.createExercise(formData);
+          console.log('Creado: ', docId);
+        }
         this.exerciseForm.reset();
       } catch (error) {
         console.error('Problema al conectar con Firestore', error);
