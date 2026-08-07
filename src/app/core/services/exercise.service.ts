@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { query, where, getDocs, addDoc, deleteDoc, doc, collection, collectionData, Firestore, getDoc, updateDoc } from '@angular/fire/firestore';
-import { catchError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Exercise } from '../models/exercise.model';
 
 @Injectable({
@@ -24,6 +24,12 @@ export class ExerciseService {
   getExercises(): Observable<Exercise[]> {
     const exerciseRef = collection(this.firestore, 'exercises');
     const q = query(exerciseRef, where('isActive', '==', true));
+    return collectionData(q, { idField: 'id' }) as Observable<Exercise[]>;
+  }
+
+  getInactiveExercises(): Observable<Exercise[]> {
+    const exerciseRef = collection(this.firestore, 'exercises');
+    const q = query(exerciseRef, where('isActive', '==', false));
     return collectionData(q, { idField: 'id' }) as Observable<Exercise[]>;
   }
 
@@ -96,9 +102,6 @@ export class ExerciseService {
   }
 
   async processExerciseDeletion(id: string): Promise<string> {
-    // Se prepara la referencia al documento específico que vamos a afectar
-    const exerciseRef = doc(this.firestore, 'exercises', id);
-
     // Consultamos si el ejercicio está en uso esperando la promesa
     const hasDependencies = await this.checkExerciseDependencies(id);
 

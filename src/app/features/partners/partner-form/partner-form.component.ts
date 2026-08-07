@@ -2,9 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
 import { GenderPipe } from '../../../core/pipes/gender.pipe';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Training } from '../../../core/models/training.model';
 import { Partner } from '../../../core/models/partner.model';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   standalone: true,
@@ -17,6 +18,8 @@ export class PartnerFormComponent implements OnInit {
   private partnerService = inject(PartnerService);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute)
+  private toastService = inject(ToastService);
+  private router = inject(Router);
 
   // Formulario reactivo
   public partnerForm!: FormGroup;
@@ -76,7 +79,9 @@ export class PartnerFormComponent implements OnInit {
           console.log('Creado', docId);
         }
         // Limpiamos el formulario
+        this.toastService.showToast('Socio guardado correctamente.');
         this.partnerForm.reset();
+        this.router.navigate(['/partners']);
       } catch (error) {
         console.error('Problema al contactar con Firestore:', error);
       }

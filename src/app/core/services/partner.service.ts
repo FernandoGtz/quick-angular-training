@@ -2,8 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, addDoc, query, getDocs, doc, deleteDoc, where, collectionData, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Partner } from '../models/partner.model';
 import { Observable } from 'rxjs';
-import { Training } from '../models/training.model';
-
 
 @Injectable({
   providedIn: 'root',
@@ -63,25 +61,23 @@ export class PartnerService {
     }
   }
 
-  async deletePartner(id: string): Promise<void> {
+  async deletePartner(id: string): Promise<'DELETED' | 'BLOCKED'> {
     try {
-      // Buscamos la referencia del documento en la colección de entrenamientos
+      // Obtenemos la referencia de la coleccion
       const trainingRef = collection(this.firestore, 'trainings');
-
-      // Construimos  y ejecutamos la query
+      // Creamos y ejecutamos la query
       const q = query(trainingRef, where('partnerId', '==', id));
       const querySnapshot = await getDocs(q);
-
-      // Buscamos la referencia de los documentos que queremos modificar
+      // Obtenemos la referencia del documento
       const partnerRef = doc(this.firestore, 'partners', id);
 
       if (querySnapshot.empty) {
-        // Si no hay entrenamientos asociados a un partner, eliminamos el documento
+        // Si no hay un entrenamiento asociado realizamos un hard delete
         await deleteDoc(partnerRef);
-        console.log(partnerRef, 'Fue borrado correctamente');
+        return 'DELETED';
       } else {
-        // Bloqueamos la operacion si hay entrenamientos asociados a un partner
-        console.log('No se puede eliminar el partner porque tiene entrenamientos asociados.');
+        // Si los hay, bloqueamos la operacion
+        return 'BLOCKED';
       }
     } catch (error) {
       console.error('Error al intentar borrar al socio', error);

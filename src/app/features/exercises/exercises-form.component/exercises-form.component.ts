@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ExerciseService } from '../../../core/services/exercise.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Exercise } from '../../../core/models/exercise.model';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   standalone: true,
@@ -15,6 +16,8 @@ export class ExercisesFormComponent implements OnInit {
   private exerciseService = inject(ExerciseService);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute)
+  private toastService = inject(ToastService);
+  private router = inject(Router);
 
   //Formulario reactivo
   public exerciseForm!: FormGroup;
@@ -56,6 +59,8 @@ export class ExercisesFormComponent implements OnInit {
           const docId = await this.exerciseService.createExercise(formData);
           console.log('Creado: ', docId);
         }
+        this.toastService.showToast('Ejercicio guardado correctamente.');
+        this.router.navigate(['/exercises']);
         this.exerciseForm.reset();
       } catch (error) {
         console.error('Problema al conectar con Firestore', error);

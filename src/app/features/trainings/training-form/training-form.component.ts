@@ -7,8 +7,9 @@ import { ExerciseService } from '../../../core/services/exercise.service';
 import { PartnerService } from '../../../core/services/partner.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Training } from '../../../core/models/training.model';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   standalone: true,
@@ -22,6 +23,8 @@ export class TrainingFormComponent implements OnInit {
   private exerciseService = inject(ExerciseService);
   private partnerService = inject(PartnerService);
   private route = inject(ActivatedRoute)
+  private toastService = inject(ToastService);
+  private router = inject(Router);
 
   public trainingForm!: FormGroup;
   public exercises$: Observable<Exercise[]> | undefined;
@@ -71,8 +74,10 @@ export class TrainingFormComponent implements OnInit {
 
           console.log('Creado: ', docId);
         }
+        this.toastService.showToast('Entrenamiento guardado correctamente.');
         // Limpiamos el formulario
         this.trainingForm.reset();
+        this.router.navigate(['/trainings']);
       } catch (error) {
         console.error('Problema al contactar con Firestore:', error);
       }

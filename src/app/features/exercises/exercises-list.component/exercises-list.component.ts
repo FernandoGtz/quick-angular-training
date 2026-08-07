@@ -18,7 +18,10 @@ export class ExercisesListComponent implements OnInit {
   private exerciseService = inject(ExerciseService);
   private toastService = inject(ToastService);
 
+
   // Observable para ejercicios
+  public isArchivedModalOpen: boolean = false;
+  public archivedExercises$: Observable<Exercise[]> | undefined;
   public exercises$: Observable<Exercise[]> | undefined;
   public isModalOpen: boolean = false;
   public selectedId: string = '';
@@ -51,5 +54,15 @@ export class ExercisesListComponent implements OnInit {
     } catch (error) {
       console.error('Error al procesar la eliminación del ejercicio:', error);
     }
+  }
+
+  openArchivedModal() {
+    this.archivedExercises$ = this.exerciseService.getInactiveExercises();
+    this.isArchivedModalOpen = true;
+  }
+
+  async reactivateExercise(id: string) {
+    await this.exerciseService.changeExerciseState(id, true);
+    this.toastService.showToast('Ejercicio reactivado correctamente.');
   }
 }
