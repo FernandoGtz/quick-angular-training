@@ -34,3 +34,12 @@
     </div>
   }
 </div>
+
+<!-- Modal para confirmar delete -->
+<app-confirm-modal
+  [isOpen]="isModalOpen"
+  title="Eliminar Ejercicio"
+  message="¿Estás seguro de que deseas eliminar este ejercicio? Esta acción es irreversible."
+  (confirm)="executeDelete()"
+  (cancel)="isModalOpen = false"
+/>

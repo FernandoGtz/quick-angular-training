@@ -1,38 +1,55 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ExerciseService } from '../../../core/services/exercise.service';
 import { Exercise } from '../../../core/models/exercise.model';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component.component';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   standalone: true,
   selector: 'app-exercises-list.component',
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, ConfirmModalComponent],
   templateUrl: './exercises-list.component.html'
 })
 export class ExercisesListComponent implements OnInit {
   // Inyeccion del servicio
-  private exercisesService = inject(ExerciseService);
+  private exerciseService = inject(ExerciseService);
+  private toastService = inject(ToastService);
 
   // Observable para ejercicios
   public exercises$: Observable<Exercise[]> | undefined;
+  public isModalOpen: boolean = false;
+  public selectedId: string = '';
 
   ngOnInit() {
     // Inicializacion
-    this.exercises$ = this.exercisesService.getExercises();
+    this.exercises$ = this.exerciseService.getExercises();
   }
 
-  async deleteExercise(id: string): Promise<void> {
-    const confirm = window.confirm('¿Estás seguro de borrar este ejercicio?');
+  deleteExercise(id: string): void {
+    this.selectedId = id;
+    this.isModalOpen = true;
+  }
 
-    if (confirm) {
-      try {
-        this.exercisesService.deleteExercise(id);
-        console.log('Ejercicio eliminado');
-      } catch (error) {
-        console.log('Error al borrar el ejercicio: ', error);
+  async executeDelete() {
+    try {
+      // Invocamos al orquestador del servicio pasándole el ID guardado
+      const deletionType = await this.exerciseService.processExerciseDeletion(this.selectedId);
+
+      // Cerramos el modal de confirmación
+      this.isModalOpen = false;
+
+      // Evaluamos la respuesta para disparar el Toast con el mensaje correcto
+      if (deletionType === 'SOFT_DELETE') {
+        this.toastService.showToast('El ejercicio está en uso. Fue archivado (Soft Delete).');
+      } else {
+        this.toastService.showToast('El ejercicio fue eliminado definitivamente.');
       }
+      this.selectedId = '';
+    } catch (error) {
+      console.error('Error al procesar la eliminación del ejercicio:', error);
     }
   }
 }

@@ -27,7 +27,7 @@ export class TrainingListComponent implements OnInit {
     this.trainingsView$ = combineLatest([
       this.trainingService.getTrainings(),
       this.partnerService.getPartners(),
-      this.exerciseService.getExercises(),
+      this.exerciseService.getAllExercises(),
     ]).pipe(
       // El map extrae los tres arreglos resultantes en el mismo orden
       map(([trainings, partners, exercises]) => {
@@ -55,7 +55,7 @@ export class TrainingListComponent implements OnInit {
 
     if (confirm) {
       try {
-        this.trainingService.deleteTraining(id);
+        await this.trainingService.deleteTraining(id);
         console.log('Eliminado');
       } catch (error) {
         console.log('Error al borrar el entrenamiento: ', error);
