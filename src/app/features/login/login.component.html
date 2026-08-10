@@ -1,9 +1,11 @@
 <div class="min-h-screen flex items-center justify-center bg-slate-900">
   <div class="w-full max-w-md bg-gray-100 p-8 rounded-2xl shadow-lg">
 
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
-      Iniciar sesión
-    </h2>
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl font-bold text-gray-900">
+        Iniciar sesión
+      </h2>
+    </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
 
@@ -48,11 +50,16 @@
             @if (loginForm.get('password')?.errors?.['required']) {
               La contraseña es requerida
             }
-            @if (loginForm.get('password')?.errors?.['minlength']) {
-              Mínimo 6 caracteres
-            }
           </p>
         }
+      </div>
+
+      <div class="mt-6 text-center text-sm text-gray-600">
+        <p>¿No estás registrado?
+          <a routerLink="/sign-up" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+            Crea un usuario.
+          </a>
+        </p>
       </div>
 
       <!-- Error global -->

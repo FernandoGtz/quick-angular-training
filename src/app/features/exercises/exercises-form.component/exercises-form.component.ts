@@ -60,7 +60,7 @@ export class ExercisesFormComponent implements OnInit {
           console.log('Creado: ', docId);
         }
         this.toastService.showToast('Ejercicio guardado correctamente.');
-        this.router.navigate(['/exercises']);
+        await this.router.navigate(['/exercises']);
         this.exerciseForm.reset();
       } catch (error) {
         console.error('Problema al conectar con Firestore', error);

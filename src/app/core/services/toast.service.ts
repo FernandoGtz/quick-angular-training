@@ -12,7 +12,7 @@ export interface ToastState {
 })
 export class ToastService {
   // Iniciamos el estado oculto y vacío
-  private state = new BehaviorSubject<ToastState>({ show: false, message: '' });
+  private state = new BehaviorSubject<ToastState>({ show: false, message: ' ' });
 
   // Exponemos el estado como un observable para que el componente lo lea
   public state$ = this.state.asObservable();

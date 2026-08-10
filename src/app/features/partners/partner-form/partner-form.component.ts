@@ -41,7 +41,10 @@ export class PartnerFormComponent implements OnInit {
       this.isEditMode = true;
       this.partnerService.getPartnerById(this.currentId).then((partner: Partner) => {
         if (partner) {
-          this.partnerForm.patchValue(partner);
+          this.partnerForm.patchValue({
+            ...partner,
+            bornDate: partner.bornDate?.toDate().toISOString().substring(0, 10)
+          });
         } else {
           console.error('Socio no encontrado.');
         }
@@ -81,7 +84,7 @@ export class PartnerFormComponent implements OnInit {
         // Limpiamos el formulario
         this.toastService.showToast('Socio guardado correctamente.');
         this.partnerForm.reset();
-        this.router.navigate(['/partners']);
+        await this.router.navigate(['/partners']);
       } catch (error) {
         console.error('Problema al contactar con Firestore:', error);
       }

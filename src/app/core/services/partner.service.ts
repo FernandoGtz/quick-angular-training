@@ -61,7 +61,7 @@ export class PartnerService {
     }
   }
 
-  async deletePartner(id: string): Promise<'DELETED' | 'BLOCKED'> {
+  async deletePartner(id: string): Promise<boolean> {
     try {
       // Obtenemos la referencia de la coleccion
       const trainingRef = collection(this.firestore, 'trainings');
@@ -74,10 +74,10 @@ export class PartnerService {
       if (querySnapshot.empty) {
         // Si no hay un entrenamiento asociado realizamos un hard delete
         await deleteDoc(partnerRef);
-        return 'DELETED';
+        return false;
       } else {
         // Si los hay, bloqueamos la operacion
-        return 'BLOCKED';
+        return true;
       }
     } catch (error) {
       console.error('Error al intentar borrar al socio', error);

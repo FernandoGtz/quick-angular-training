@@ -39,7 +39,7 @@ export class PartnerListComponent implements OnInit {
       const result = await this.partnerService.deletePartner(this.selectedId);
       this.isModalOpen = false;
 
-      if (result === 'DELETED') {
+      if (!result) {
         this.toastService.showToast('Socio eliminado correctamente.');
       } else {
         this.toastService.showToast('No se puede eliminar: el socio tiene entrenamientos asociados.');

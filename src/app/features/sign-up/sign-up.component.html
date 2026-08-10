@@ -1,0 +1,80 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full bg-gray-100 p-8 rounded-2xl shadow-md border border-gray-200">
+
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl font-bold text-gray-900">Crear cuenta</h2>
+      <p class="mt-2 text-sm text-gray-600">Ingresa tus datos para registrarte</p>
+    </div>
+
+    <!-- TU TURNO: Enlaza el formGroup y el evento de envío -->
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+      <!-- Correo -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+        <!-- TU TURNO: Enlaza el formControlName -->
+        <input id="email" formControlName="email" type="email" placeholder="correo@ejemplo.com"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input id="password" formControlName="password" type="password" placeholder="******"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
+        <input id="confirmPassword" formControlName="confirmPassword" type="password" placeholder="******"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
+
+      <!-- Contenedor de reglas de contraseña -->
+      <div class="bg-gray-50 p-3 rounded-md border border-gray-200 text-xs space-y-1">
+        <p class="font-medium text-gray-700 mb-1">La contraseña debe cumplir con:</p>
+
+        <div [class]="isMinLengthValid ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ isMinLengthValid ? '✓' : '✕' }}</span> Mínimo 8 caracteres
+        </div>
+
+        <div [class]="isNumberValid ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ isNumberValid ? '✓' : '✕' }}</span> Al menos un número
+        </div>
+
+        <div [class]="isSpecialCharValid ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ isSpecialCharValid ? '✓' : '✕' }}</span> Al menos un carácter especial
+        </div>
+
+        <div [class]="doPasswordsMatch ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ doPasswordsMatch ? '✓' : '✕' }}</span> Las contraseñas coinciden
+        </div>
+      </div>
+
+      @if (signUpForm.hasError('passwordMismatch') && signUpForm.get('confirmPassword')?.touched) {
+        <p class="text-xs text-red-600 mt-1">
+          Las contraseñas no coinciden.
+        </p>
+      }
+
+      <!-- Botón Submit -->
+      <button type="submit"
+              [disabled]="!isFormReady"
+              [class]="isFormReady ? 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-300 cursor-not-allowed'">
+        Registrarse
+      </button>
+
+    </form>
+
+    <div class="mt-6 text-center text-sm text-gray-600">
+      <p>
+        ¿Ya tienes una cuenta?
+        <!-- Enlace de regreso al login -->
+        <a routerLink="/login" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+          Inicia sesión aquí.
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

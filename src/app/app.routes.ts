@@ -8,9 +8,11 @@ import { ExercisesListComponent } from './features/exercises/exercises-list.comp
 import { ExercisesFormComponent } from './features/exercises/exercises-form.component/exercises-form.component';
 import { LoginComponent } from './features/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
+import { SignUpComponent } from './features/sign-up/sign-up.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'sign-up', component: SignUpComponent },
   {
     path: '',
     component: DashboardComponent,
@@ -33,5 +35,5 @@ export const routes: Routes = [
       { path: 'exercises/edit/:id', component: ExercisesFormComponent },
     ],
   },
-  { path: '**', redirectTo: 'partners' },
+  { path: '**', redirectTo: '' },
 ];

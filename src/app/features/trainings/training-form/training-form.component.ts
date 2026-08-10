@@ -77,7 +77,7 @@ export class TrainingFormComponent implements OnInit {
         this.toastService.showToast('Entrenamiento guardado correctamente.');
         // Limpiamos el formulario
         this.trainingForm.reset();
-        this.router.navigate(['/trainings']);
+        await this.router.navigate(['/trainings']);
       } catch (error) {
         console.error('Problema al contactar con Firestore:', error);
       }

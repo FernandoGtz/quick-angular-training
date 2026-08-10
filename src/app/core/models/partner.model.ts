@@ -1,9 +1,11 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export type Gender = 'Male' | 'Female' | 'Non';
 
 export interface Partner {
   id: string;
   name: string;
-  bornDate: Date;
+  bornDate: Timestamp;
   gender: Gender;
   cellphoneNumber: number;
   email: string;
