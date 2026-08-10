@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
 import { ToastService } from '../../core/services/toast.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,17 +17,45 @@ export class SignUpComponent implements OnInit {
   private auth = inject(Auth);
   private toastService = inject(ToastService);
 
-  public signUpForm!: FormGroup;
+  public signUpForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]]
+  }, {
+    validators: [passwordMatchValidator]
+  });
+
+
   public errorMessage: string = '';
+  private formValues = toSignal(this.signUpForm.valueChanges, {
+    initialValue: this.signUpForm.value
+  });
+
+  // 2. Extraemos valores memoizados
+  private password = computed(() => this.formValues()?.password || '');
+  private confirmPassword = computed(() => this.formValues()?.confirmPassword || '');
+
+  // 3. Reglas computadas: Solo se recalculan si 'password' cambia
+  public isMinLengthValid = computed(() => this.password().length >= 8);
+  public isNumberValid = computed(() => /\d/.test(this.password()));
+  public isSpecialCharValid = computed(() => /[!@#$%^&*(),.?":{}|<>]/.test(this.password()));
+
+  public doPasswordsMatch = computed(() => {
+    const pass = this.password();
+    const confirm = this.confirmPassword();
+    return pass.length > 0 && pass === confirm;
+  });
+
+  // 4. Estado del botón: Se recalcula solo si alguna de las señales dependientes cambia
+  public isFormReady = computed(() =>
+    this.isMinLengthValid() &&
+    this.isNumberValid() &&
+    this.isSpecialCharValid() &&
+    this.doPasswordsMatch() &&
+    this.signUpForm.get('email')?.valid
+  );
 
   ngOnInit() {
-    this.signUpForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
-    }, {
-      validators: [passwordMatchValidator]
-    });
   }
 
   async onSubmit() {
@@ -57,29 +86,6 @@ export class SignUpComponent implements OnInit {
       this.signUpForm.markAllAsTouched();
     }
   }
-
-  get passwordValue(): string { return this.signUpForm.get('password')?.value || ''; }
-
-  get isMinLengthValid(): boolean { return hasMinLength(this.passwordValue); }
-
-  get isNumberValid(): boolean { return hasNumber(this.passwordValue); }
-
-  get isSpecialCharValid(): boolean { return hasSpecialChar(this.passwordValue); }
-
-  get doPasswordsMatch(): boolean {
-    const pass = this.signUpForm.get('password')?.value;
-    const confirm = this.signUpForm.get('confirmPassword')?.value;
-    return pass && confirm && pass === confirm;
-  }
-
-  // Bandera general para habilitar/deshabilitar el botón
-  get isFormReady(): boolean {
-    return this.isMinLengthValid &&
-      this.isNumberValid &&
-      this.isSpecialCharValid &&
-      this.doPasswordsMatch &&
-      this.signUpForm.get('email')?.valid;
-  }
 }
 
 // Función validadora que recibe el formulario completo
@@ -96,22 +102,4 @@ export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): V
   return null;
 };
 
-// Funciones individuales para evaluar cada regla
-export function hasMinLength(password: string): boolean {
-  return password.length >= 8;
-}
-
-export function hasNumber(password: string): boolean {
-  return /\d/.test(password);
-}
-
-export function hasSpecialChar(password: string): boolean {
-  return /[!@#$%^&*(),.?":{}|<>]/.test(password);
-}
-
-export function passwordsMatch(group: AbstractControl): ValidationErrors | null {
-  const pass = group.get('password')?.value;
-  const confirm = group.get('confirmPassword')?.value;
-  return pass === confirm ? null : { passwordMismatch: true };
-}
 

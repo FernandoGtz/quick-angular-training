@@ -59,29 +59,23 @@ export class PartnerFormComponent implements OnInit {
 
   // Metodo para el envio del formulario
   async onSubmit() {
-    // Intentamos la creacion del partner con el formulario validado
     if (this.partnerForm.valid) {
       try {
-        // Llamada al servicio para crear el partner
         const formData = this.partnerForm.value;
 
+        // Conversión reutilizable
+        const [year, month, day] = formData.bornDate.split('-').map(Number);
+        const bornDateAsDate = new Date(year, month - 1, day);
+        const payload = { ...formData, bornDate: bornDateAsDate };
+
         if (this.isEditMode) {
-          // Actualizamos el documento partiendo del id del socio
-          await this.partnerService.updatePartner(this.currentId, this.partnerForm.value);
-          console.log('Actualizado.')
+          await this.partnerService.updatePartner(this.currentId, payload); // ← payload, no formData
+          console.log('Actualizado.');
         } else {
-          // Convertimos la fecha de nacimiento de string a Date
-          const dateString = formData.bornDate;
-          const [year, month, day] = dateString.split('-').map(Number);
-          const bornDateAsDate = new Date(year, month - 1, day);
-
-          // Reemplazamos el valor en el payload
-          const payload = { ...formData, bornDate: bornDateAsDate };
-
           const docId = await this.partnerService.createPartner(payload);
           console.log('Creado', docId);
         }
-        // Limpiamos el formulario
+
         this.toastService.showToast('Socio guardado correctamente.');
         this.partnerForm.reset();
         await this.router.navigate(['/partners']);
@@ -89,7 +83,6 @@ export class PartnerFormComponent implements OnInit {
         console.error('Problema al contactar con Firestore:', error);
       }
     } else {
-      // Si el formulario no es valido, marcamos todos los campos como tocados para mostrar los errores
       this.partnerForm.markAllAsTouched();
       console.warn('El formulario tiene errores.');
     }

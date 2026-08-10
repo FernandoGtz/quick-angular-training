@@ -1,7 +1,7 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { FilterBarComponent } from '../filter-bar/filter-bar.component.component';
+import { FilterBarComponent } from '../filter-bar/filter-bar.component';
 
 @Component({
   standalone: true,

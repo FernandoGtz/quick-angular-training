@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { PartnerService } from '../../../core/services/partner.service';
 import { Partner } from '../../../core/models/partner.model';
 import { Observable } from 'rxjs';
@@ -6,18 +6,20 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { GenderPipe } from '../../../core/pipes/gender.pipe';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
-import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component.component';
+import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
 
 @Component({
   standalone: true,
   selector: 'app-partner-list',
   imports: [AsyncPipe, DatePipe, GenderPipe, RouterLink, ConfirmModalComponent],
-  templateUrl: './partner-list.component.html'
+  templateUrl: './partner-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartnerListComponent implements OnInit {
   // Inyeccion del servicio
   private partnerService = inject(PartnerService);
   private toastService = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   // Observable de partners
   public partners$: Observable<Partner[]> | undefined;
@@ -37,7 +39,10 @@ export class PartnerListComponent implements OnInit {
   async executeDelete() {
     try {
       const result = await this.partnerService.deletePartner(this.selectedId);
+
       this.isModalOpen = false;
+      this.selectedId = '';
+      this.cdr.markForCheck();
 
       if (!result) {
         this.toastService.showToast('Socio eliminado correctamente.');

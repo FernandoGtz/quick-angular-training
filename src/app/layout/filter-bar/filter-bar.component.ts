@@ -32,7 +32,7 @@ const SECTIONS: Record<string, SectionConfig> = {
   selector: 'app-filter-bar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
-  templateUrl: './filter-bar.component.component.html',
+  templateUrl: './filter-bar.component.html',
 })
 export class FilterBarComponent {
   private router = inject(Router);

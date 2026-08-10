@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-confirm-modal',
   standalone: true,
   imports: [],
-  templateUrl: './confirm-modal.component.component.html',
+  templateUrl: './confirm-modal.component.html',
 })
 export class ConfirmModalComponent {
   // Control de visibilidad dictado por el padre

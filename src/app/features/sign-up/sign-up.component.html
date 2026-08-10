@@ -35,20 +35,20 @@
       <div class="bg-gray-50 p-3 rounded-md border border-gray-200 text-xs space-y-1">
         <p class="font-medium text-gray-700 mb-1">La contraseña debe cumplir con:</p>
 
-        <div [class]="isMinLengthValid ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
-          <span>{{ isMinLengthValid ? '✓' : '✕' }}</span> Mínimo 8 caracteres
+        <div [class]="isMinLengthValid() ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ isMinLengthValid() ? '✓' : '✕' }}</span> Mínimo 8 caracteres
         </div>
 
-        <div [class]="isNumberValid ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
-          <span>{{ isNumberValid ? '✓' : '✕' }}</span> Al menos un número
+        <div [class]="isNumberValid() ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ isNumberValid() ? '✓' : '✕' }}</span> Al menos un número
         </div>
 
-        <div [class]="isSpecialCharValid ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
-          <span>{{ isSpecialCharValid ? '✓' : '✕' }}</span> Al menos un carácter especial
+        <div [class]="isSpecialCharValid() ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ isSpecialCharValid() ? '✓' : '✕' }}</span> Al menos un carácter especial
         </div>
 
-        <div [class]="doPasswordsMatch ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
-          <span>{{ doPasswordsMatch ? '✓' : '✕' }}</span> Las contraseñas coinciden
+        <div [class]="doPasswordsMatch() ? 'text-green-600 flex items-center gap-1.5' : 'text-red-500 flex items-center gap-1.5'">
+          <span>{{ doPasswordsMatch() ? '✓' : '✕' }}</span> Las contraseñas coinciden
         </div>
       </div>
 
@@ -60,8 +60,8 @@
 
       <!-- Botón Submit -->
       <button type="submit"
-              [disabled]="!isFormReady"
-              [class]="isFormReady ? 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-300 cursor-not-allowed'">
+              [disabled]="!isFormReady()"
+              [class]="isFormReady() ? 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-300 cursor-not-allowed'">
         Registrarse
       </button>
 

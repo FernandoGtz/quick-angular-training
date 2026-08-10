@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { PartnerService } from '../../../core/services/partner.service';
 import { TrainingView } from '../../../core/models/training.model';
 import { combineLatest, map, Observable } from 'rxjs';
@@ -7,13 +7,14 @@ import { TrainingService } from '../../../core/services/training.service';
 import { ExerciseService } from '../../../core/services/exercise.service';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
-import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component.component';
+import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
 
 @Component({
   standalone: true,
   selector: 'app-training-list',
   imports: [AsyncPipe, RouterLink, ConfirmModalComponent],
   templateUrl: './training-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrainingListComponent implements OnInit {
   // Inyeccion del servicio

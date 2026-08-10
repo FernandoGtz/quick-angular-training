@@ -1,23 +1,24 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ExerciseService } from '../../../core/services/exercise.service';
 import { Exercise } from '../../../core/models/exercise.model';
-import { delay, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component.component';
+import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
 import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   standalone: true,
   selector: 'app-exercises-list.component',
   imports: [AsyncPipe, RouterLink, ConfirmModalComponent],
-  templateUrl: './exercises-list.component.html'
+  templateUrl: './exercises-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExercisesListComponent implements OnInit {
   // Inyeccion del servicio
   private exerciseService = inject(ExerciseService);
   private toastService = inject(ToastService);
-
+  private cdr = inject(ChangeDetectorRef);
 
   // Observable para ejercicios
   public isArchivedModalOpen: boolean = false;
@@ -43,6 +44,8 @@ export class ExercisesListComponent implements OnInit {
 
       // Cerramos el modal de confirmación
       this.isModalOpen = false;
+      this.selectedId = '';
+      this.cdr.markForCheck();
 
       // Evaluamos la respuesta para disparar el Toast con el mensaje correcto
       if (deletionType === 'SOFT_DELETE') {
@@ -50,7 +53,6 @@ export class ExercisesListComponent implements OnInit {
       } else {
         this.toastService.showToast('El ejercicio fue eliminado definitivamente.');
       }
-      this.selectedId = '';
     } catch (error) {
       console.error('Error al procesar la eliminación del ejercicio:', error);
     }
