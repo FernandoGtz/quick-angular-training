@@ -11,7 +11,7 @@
         <input type="text" formControlName="name" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
                  focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
                  placeholder:text-gray-400" />
-        @if (partnerForm.get('name')?.hasError('required') && partnerForm.get('name')?.touched) {
+        @if (nameCtrl.hasError('required') && nameCtrl.touched) {
           <span class="text-coral-600 text-sm">El nombre es obligatorio</span>
         }
       </div>
@@ -22,7 +22,7 @@
         <input type="email" formControlName="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
                  focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
                  placeholder:text-gray-400" />
-        @if (partnerForm.get('email')?.hasError('required') && partnerForm.get('email')?.touched) {
+        @if (emailCtrl.hasError('required') && emailCtrl.touched) {
           <span class="text-coral-600 text-sm">El email es obligatorio</span>
         }
       </div>
@@ -46,7 +46,7 @@
           }
         </select>
 
-        @if (partnerForm.get('gender')?.hasError('required') && partnerForm.get('gender')?.touched) {
+        @if (genderCtrl.hasError('required') && genderCtrl.touched) {
           <span class="text-coral-600 text-sm">Requerido</span>
         }
       </div>
@@ -57,11 +57,14 @@
         <input type="date" formControlName="bornDate" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
                  focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
                  placeholder:text-gray-400" />
-        @if (partnerForm.get('bornDate')?.errors?.['required'] && partnerForm.get('bornDate')?.touched) { <span class="text-coral-600 text-sm">Requerido</span> }
+        @if (bornDateCtrl.hasError('required') && bornDateCtrl.touched) { <span class="text-coral-600 text-sm">Requerido</span> }
       </div>
 
       <!-- Button -->
-      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium
-               rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">Guardar Socio</button>    </form>
+      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium flex items-center justify-center gap-2
+               rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <app-icon [icon]="Save" [size]="18" className="block"></app-icon>
+        Guardar Socio
+      </button>    </form>
   </div>
 </div>

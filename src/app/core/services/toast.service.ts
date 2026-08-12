@@ -25,19 +25,30 @@ export class ToastService {
   // Expose the state as an observable so the component can read it
   public state$ = this.state.asObservable();
 
+  /* Reference to the pending auto-hide timeout, if any. */
+  private hideTimeout: ReturnType<typeof setTimeout> | null = null;
+
   /*
    * Shows a toast with the given message.
    * Updates the state to display the message and schedules an automatic
-   * cleanup that hides the toast again after five seconds.
+   * cleanup that hides the toast again after five seconds. If a toast is
+   * already visible, the previous timeout is cancelled so the new message
+   * is not hidden prematurely.
    */
   showToast(message: string) {
+    // Cancel any pending auto-hide so the new toast gets its full duration
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+    }
+
     // Update the state to show the message
     this.state.next({ show: true, message });
 
     // Implement the automatic cleanup
-    setTimeout(() => {
+    this.hideTimeout = setTimeout(() => {
       // Return the state to hidden, emptying the message
       this.state.next({ show: false, message: '' });
+      this.hideTimeout = null;
     }, 5000);
   }
 }

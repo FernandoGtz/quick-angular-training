@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ExerciseService } from '../../../core/services/exercise.service';
 import { Exercise } from '../../../core/models/exercise.model';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
 import { ToastService } from '../../../core/services/toast.service';
+import { IconComponent } from '../../../layout/icon/icon.component';
+import Archive from 'lucide/dist/esm/icons/archive.mjs';
+import Pencil from 'lucide/dist/esm/icons/pencil.mjs';
+import RotateCcw from 'lucide/dist/esm/icons/rotate-ccw.mjs';
+import Trash2 from 'lucide/dist/esm/icons/trash-2.mjs';
+import X from 'lucide/dist/esm/icons/x.mjs';
 
 /*
  * Exercises list component.
@@ -17,7 +23,7 @@ import { ToastService } from '../../../core/services/toast.service';
 @Component({
   standalone: true,
   selector: 'app-exercises-list.component',
-  imports: [AsyncPipe, RouterLink, ConfirmModalComponent],
+  imports: [AsyncPipe, RouterLink, ConfirmModalComponent, IconComponent],
   templateUrl: './exercises-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -29,10 +35,17 @@ export class ExercisesListComponent implements OnInit {
 
   // Observables for exercises
   public isArchivedModalOpen: boolean = false;
-  public archivedExercises$: Observable<Exercise[]> | undefined;
+  /* Shared stream so opening the modal multiple times does not recreate the
+   * Firestore listener every time. */
+  public archivedExercises$: Observable<Exercise[]> = this.exerciseService.getInactiveExercises().pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
   public exercises$: Observable<Exercise[]> | undefined;
   public isModalOpen: boolean = false;
   public selectedId: string = '';
+
+  /* Exposed icon references for the template. */
+  protected readonly icons = { Archive, Pencil, RotateCcw, Trash2, X } as const;
 
   /* Initializes the observable of active exercises. */
   ngOnInit() {
@@ -74,10 +87,10 @@ export class ExercisesListComponent implements OnInit {
   }
 
   /*
-   * Opens the archived exercises modal, loading the inactive exercises.
+   * Opens the archived exercises modal.
+   * The observable is created once and shared via shareReplay.
    */
   openArchivedModal() {
-    this.archivedExercises$ = this.exerciseService.getInactiveExercises();
     this.isArchivedModalOpen = true;
   }
 

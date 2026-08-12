@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { IconComponent } from '../../layout/icon/icon.component';
+import LogIn from 'lucide/dist/esm/icons/log-in.mjs';
 
 /*
  * Login component.
@@ -12,8 +14,9 @@ import { Router, RouterLink } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './login.component.html'
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
+  templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
   // Injection of the form builder, the auth service and the router
@@ -23,9 +26,16 @@ export class LoginComponent implements OnInit {
 
   public loginForm!: FormGroup;
 
-  // Component state
-  errorMessage: string | null = null;
-  loading = false;
+  // Component state as signals to work cleanly with OnPush.
+  errorMessage = signal<string | null>(null);
+  loading = signal(false);
+
+  /* Exposed icon reference for the template. */
+  protected readonly LogIn = LogIn;
+
+  /* Shortcuts to the form controls used in the template. */
+  get emailCtrl() { return this.loginForm.get('email')!; }
+  get passwordCtrl() { return this.loginForm.get('password')!; }
 
   /* Initializes the reactive form with its validators. */
   ngOnInit() {
@@ -47,8 +57,8 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = null;
+    this.loading.set(true);
+    this.errorMessage.set(null);
 
     const { email, password } = this.loginForm.value;
 
@@ -59,9 +69,9 @@ export class LoginComponent implements OnInit {
       await this.router.navigate(['/']);
     } catch (error) {
       console.error('Login error:', error);
-      this.errorMessage = 'Credenciales inválidas';
+      this.errorMessage.set('Credenciales inválidas');
     } finally {
-      this.loading = false;
+      this.loading.set(false);
     }
   }
 }

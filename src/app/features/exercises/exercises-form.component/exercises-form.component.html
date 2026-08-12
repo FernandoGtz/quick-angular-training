@@ -11,7 +11,7 @@
         <input type="text" formControlName="name" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
                    focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
                    placeholder:text-gray-400 ">
-        @if (exerciseForm.get('name')?.hasError('required') && exerciseForm.get('name')?.touched) {
+        @if (nameCtrl.hasError('required') && nameCtrl.touched) {
           <span class="text-coral-600 text-sm">El nombre es obligatorio</span>
         }
       </div>
@@ -21,13 +21,16 @@
         <input type="text" formControlName="targetMuscle" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
                    focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
                    placeholder:text-gray-400 ">
-        @if (exerciseForm.get('targetMuscle')?.hasError('required') && exerciseForm.get('targetMuscle')?.touched) {
+        @if (targetMuscleCtrl.hasError('required') && targetMuscleCtrl.touched) {
           <span class="text-coral-600 text-sm">El grupo muscular es obligatorio</span>
         }
       </div>
 
-      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium
-                 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">Guardar Ejercicio</button>
+      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium flex items-center justify-center gap-2
+                 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <app-icon [icon]="Save" [size]="18" className="block"></app-icon>
+        Guardar Ejercicio
+      </button>
     </form>
   </div>
 </div>

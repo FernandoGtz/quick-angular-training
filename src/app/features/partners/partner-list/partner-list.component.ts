@@ -4,9 +4,13 @@ import { Partner } from '../../../core/models/partner.model';
 import { Observable } from 'rxjs';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { GenderPipe } from '../../../core/pipes/gender.pipe';
+import { TimestampDatePipe } from '../../../core/pipes/timestamp-date.pipe';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
+import { IconComponent } from '../../../layout/icon/icon.component';
+import Pencil from 'lucide/dist/esm/icons/pencil.mjs';
+import Trash2 from 'lucide/dist/esm/icons/trash-2.mjs';
 
 /*
  * Partner list component.
@@ -18,7 +22,7 @@ import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-mod
 @Component({
   standalone: true,
   selector: 'app-partner-list',
-  imports: [AsyncPipe, DatePipe, GenderPipe, RouterLink, ConfirmModalComponent],
+  imports: [AsyncPipe, DatePipe, GenderPipe, TimestampDatePipe, RouterLink, ConfirmModalComponent, IconComponent],
   templateUrl: './partner-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -32,6 +36,9 @@ export class PartnerListComponent implements OnInit {
   public partners$: Observable<Partner[]> | undefined;
   public isModalOpen: boolean = false;
   public selectedId: string = '';
+
+  /* Exposed icon references for the template. */
+  protected readonly icons = { Pencil, Trash2 } as const;
 
   /* Initializes the observable of partners from the service. */
   ngOnInit() {

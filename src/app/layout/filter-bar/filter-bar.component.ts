@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
@@ -48,6 +48,7 @@ const SECTIONS: Record<string, SectionConfig> = {
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './filter-bar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterBarComponent {
   private router = inject(Router);

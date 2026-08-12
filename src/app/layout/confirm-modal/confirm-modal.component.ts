@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { IconComponent } from '../icon/icon.component';
+import Trash2 from 'lucide/dist/esm/icons/trash-2.mjs';
 
 /*
  * Confirm modal component.
@@ -9,8 +11,9 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 @Component({
   selector: 'app-confirm-modal',
   standalone: true,
-  imports: [],
+  imports: [IconComponent],
   templateUrl: './confirm-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmModalComponent {
   // Visibility control dictated by the parent
@@ -23,6 +26,9 @@ export class ConfirmModalComponent {
   // Event emitters towards the parent
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
+
+  /* Exposed icon reference for the template. */
+  protected readonly Trash2 = Trash2;
 
   /* Emits the confirm event to the parent. */
   onConfirm() {

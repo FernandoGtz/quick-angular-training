@@ -1,9 +1,11 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth, createUserWithEmailAndPassword, sendEmailVerification } from '@angular/fire/auth';
 import { ToastService } from '../../core/services/toast.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { IconComponent } from '../../layout/icon/icon.component';
+import UserPlus from 'lucide/dist/esm/icons/user-plus.mjs';
 
 /*
  * Sign-up component.
@@ -14,8 +16,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './sign-up.component.html'
+  imports: [ReactiveFormsModule, RouterLink, IconComponent],
+  templateUrl: './sign-up.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignUpComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -32,10 +35,16 @@ export class SignUpComponent implements OnInit {
   });
 
 
-  public errorMessage: string = '';
+  public errorMessage = signal('');
   private formValues = toSignal(this.signUpForm.valueChanges, {
     initialValue: this.signUpForm.value
   });
+  private formStatus = toSignal(this.signUpForm.statusChanges, {
+    initialValue: this.signUpForm.status
+  });
+
+  /* Exposed icon reference for the template. */
+  protected readonly UserPlus = UserPlus;
 
   // 1. Extract memoized field values from the form
   private password = computed(() => this.formValues()?.password || '');
@@ -52,14 +61,23 @@ export class SignUpComponent implements OnInit {
     return pass.length > 0 && pass === confirm;
   });
 
-  // 3. Button state: recalculated only when any dependent signal changes
-  public isFormReady = computed(() =>
-    this.isMinLengthValid() &&
-    this.isNumberValid() &&
-    this.isSpecialCharValid() &&
-    this.doPasswordsMatch() &&
-    this.signUpForm.get('email')?.valid
-  );
+  // 3. Button state: recalculated only when any dependent signal changes.
+  // formStatus() is read to ensure the computed re-evaluates on validity changes.
+  public isFormReady = computed(() => {
+    this.formStatus();
+    return this.isMinLengthValid() &&
+      this.isNumberValid() &&
+      this.isSpecialCharValid() &&
+      this.doPasswordsMatch() &&
+      this.signUpForm.get('email')?.valid;
+  });
+
+  /* Computed helper for the password mismatch error message. */
+  public showPasswordMismatchError = computed(() => {
+    this.formStatus();
+    return this.signUpForm.hasError('passwordMismatch') &&
+      this.signUpForm.get('confirmPassword')?.touched;
+  });
 
   ngOnInit() {
   }
@@ -90,9 +108,9 @@ export class SignUpComponent implements OnInit {
         // Handle common Firebase errors (e.g. 'auth/email-already-in-use')
         console.error('Sign-up error:', error);
         // Handle common Firebase Auth error codes
-        if (error.code === 'auth/email-already-in-use') this.errorMessage = 'Este correo electrónico ya se encuentra registrado.';
-        else if (error.code === 'auth/weak-password') this.errorMessage = 'La contraseña es demasiado débil.';
-        else this.errorMessage = 'Ocurrió un error al intentar crear la cuenta.';
+        if (error.code === 'auth/email-already-in-use') this.errorMessage.set('Este correo electrónico ya se encuentra registrado.');
+        else if (error.code === 'auth/weak-password') this.errorMessage.set('La contraseña es demasiado débil.');
+        else this.errorMessage.set('Ocurrió un error al intentar crear la cuenta.');
       }
     } else {
       this.signUpForm.markAllAsTouched();

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, signOut, authState, User } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 
 /*
  * Authentication service.
@@ -13,8 +13,12 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private auth = inject(Auth);
 
-  /* Observable that emits the currently authenticated user or null. */
-  public authState$: Observable<User | null> = authState(this.auth);
+  /* Observable that emits the currently authenticated user or null.
+   * shareReplay prevents multiple Firebase listeners when several
+   * subscribers ask for the auth state. */
+  public authState$: Observable<User | null> = authState(this.auth).pipe(
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
 
   /*
    * Signs a user in with email and password credentials.

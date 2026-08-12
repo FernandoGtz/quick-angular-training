@@ -1,45 +1,68 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './layout/dashboard/dashboard.component';
-import { PartnerListComponent } from './features/partners/partner-list/partner-list.component';
-import { PartnerFormComponent } from './features/partners/partner-form/partner-form.component';
-import { TrainingListComponent } from './features/trainings/training-list/training-list.component';
-import { TrainingFormComponent } from './features/trainings/training-form/training-form.component';
-import { ExercisesListComponent } from './features/exercises/exercises-list.component/exercises-list.component';
-import { ExercisesFormComponent } from './features/exercises/exercises-form.component/exercises-form.component';
-import { LoginComponent } from './features/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
-import { SignUpComponent } from './features/sign-up/sign-up.component';
 
 /*
  * Application route table.
  * Defines the public routes (login and sign-up) and the protected
  * dashboard section (guarded by authGuard) with the CRUD routes for
  * trainings, partners and exercises, including their new/edit pages.
+ * All feature components are lazy-loaded to keep the initial bundle small.
  * Any unknown path is redirected to the dashboard root.
  */
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'sign-up', component: SignUpComponent },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/login/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'sign-up',
+    loadComponent: () => import('./features/sign-up/sign-up.component').then(m => m.SignUpComponent),
+  },
   {
     path: '',
-    component: DashboardComponent,
+    loadComponent: () => import('./layout/dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'trainings', pathMatch: 'full' },
       // Routes for trainings
-      { path: 'trainings', component: TrainingListComponent },
-      { path: 'trainings/new', component: TrainingFormComponent },
-      { path: 'trainings/edit/:id', component: TrainingFormComponent },
-
+      {
+        path: 'trainings',
+        loadComponent: () => import('./features/trainings/training-list/training-list.component').then(m => m.TrainingListComponent),
+      },
+      {
+        path: 'trainings/new',
+        loadComponent: () => import('./features/trainings/training-form/training-form.component').then(m => m.TrainingFormComponent),
+      },
+      {
+        path: 'trainings/edit/:id',
+        loadComponent: () => import('./features/trainings/training-form/training-form.component').then(m => m.TrainingFormComponent),
+      },
       // Routes for partners
-      { path: 'partners', component: PartnerListComponent },
-      { path: 'partners/new', component: PartnerFormComponent },
-      { path: 'partners/edit/:id', component: PartnerFormComponent },
-
+      {
+        path: 'partners',
+        loadComponent: () => import('./features/partners/partner-list/partner-list.component').then(m => m.PartnerListComponent),
+      },
+      {
+        path: 'partners/new',
+        loadComponent: () => import('./features/partners/partner-form/partner-form.component').then(m => m.PartnerFormComponent),
+      },
+      {
+        path: 'partners/edit/:id',
+        loadComponent: () => import('./features/partners/partner-form/partner-form.component').then(m => m.PartnerFormComponent),
+      },
       // Routes for exercises
-      { path: 'exercises', component: ExercisesListComponent },
-      { path: 'exercises/new', component: ExercisesFormComponent },
-      { path: 'exercises/edit/:id', component: ExercisesFormComponent },
+      {
+        path: 'exercises',
+        loadComponent: () => import('./features/exercises/exercises-list.component/exercises-list.component').then(m => m.ExercisesListComponent),
+      },
+      {
+        path: 'exercises/new',
+        loadComponent: () => import('./features/exercises/exercises-form.component/exercises-form.component').then(m => m.ExercisesFormComponent),
+      },
+      {
+        path: 'exercises/edit/:id',
+        loadComponent: () => import('./features/exercises/exercises-form.component/exercises-form.component').then(m => m.ExercisesFormComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

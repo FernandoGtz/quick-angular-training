@@ -14,10 +14,10 @@
         <input type="text" formControlName="description" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
                  focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
                  placeholder:text-gray-400 ">
-        @if (trainingForm.get('description')?.hasError('required') && trainingForm.get('description')?.touched) {
+        @if (descriptionCtrl.hasError('required') && descriptionCtrl.touched) {
           <span class="text-coral-600 text-sm">La descripción es obligatoria</span>
         }
-        @if (trainingForm.get('description')?.hasError('minlength') && trainingForm.get('description')?.touched) {
+        @if (descriptionCtrl.hasError('minlength') && descriptionCtrl.touched) {
           <span class="text-coral-600 text-sm">La descripción debe tener al menos 10 caracteres</span>
         }
       </div>
@@ -36,7 +36,7 @@
             <option disabled>No hay ejercicios cargados en el catálogo.</option>
           }
         </select>
-        @if (trainingForm.get('exercisesIds')?.hasError('required') && trainingForm.get('exercisesIds')?.touched) {
+        @if (exercisesIdsCtrl.hasError('required') && exercisesIdsCtrl.touched) {
           <span class="text-coral-600 text-sm">Debes seleccionar al menos un ejercicio para la rutina.</span>
         }
       </div>
@@ -55,13 +55,16 @@
             <option disabled>No hay socios registrados.</option>
           }
         </select>
-        @if (trainingForm.get('partnerId')?.hasError('required') && trainingForm.get('partnerId')?.touched) {
+        @if (partnerIdCtrl.hasError('required') && partnerIdCtrl.touched) {
           <span class="text-coral-600 text-sm">Debes seleccionar un socio.</span>
         }
       </div>
 
-      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium
-               rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">Guardar Entrenamiento</button>
+      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium flex items-center justify-center gap-2
+               rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <app-icon [icon]="Save" [size]="18" className="block"></app-icon>
+        Guardar Entrenamiento
+      </button>
     </form>
   </div>
 </div>

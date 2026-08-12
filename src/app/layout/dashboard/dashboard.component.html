@@ -17,13 +17,13 @@
     <!-- Logo -->
     <div class="flex items-center justify-between px-6 py-4">
       <div class="flex items-center gap-2">
-        <img src="/logo.svg" alt="Gym App logo" class="w-16 h-16" />
+        <img src="/logo.svg" alt="Gym App logo" class="w-8 h-8" decoding="async" />
         <span class="text-white font-semibold text-lg">Gym App</span>
       </div>
       <!-- Close button on mobile -->
       <button type="button" (click)="closeSidebar()"
               class="lg:hidden text-gray-300 hover:text-white transition-colors">
-        <i class="ti ti-x text-xl"></i>
+        <app-icon [icon]="icons.X" [size]="20" className="block" iconTitle="Cerrar menú"></app-icon>
       </button>
     </div>
 
@@ -31,19 +31,19 @@
       <a routerLink="trainings" routerLinkActive="bg-white/10 text-white"
          (click)="closeSidebar()"
          class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
-        <i class="ti ti-barbell text-lg"></i>
+        <app-icon [icon]="icons.ListChecks" [size]="18" className="block"></app-icon>
         Entrenamientos
       </a>
       <a routerLink="exercises" routerLinkActive="bg-white/10 text-white"
          (click)="closeSidebar()"
          class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
-        <i class="ti ti-dumbbell text-lg"></i>
+        <app-icon [icon]="icons.Dumbbell" [size]="18" className="block"></app-icon>
         Ejercicios
       </a>
       <a routerLink="partners" routerLinkActive="bg-white/10 text-white"
          (click)="closeSidebar()"
          class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
-        <i class="ti ti-users text-lg"></i>
+        <app-icon [icon]="icons.Users" [size]="18" className="block"></app-icon>
         Socios
       </a>
     </nav>
@@ -51,7 +51,7 @@
     <div class="w-full flex items-center justify-center gap-2 px-4 py-2 mt-auto">
       <button type="button" (click)="logout()"
               class="flex items-center gap-3 px-3 py-2 rounded-lg text-coral-300 hover:bg-coral-950 hover:text-coral-200 transition-colors w-full">
-        <i class="ti ti-logout text-lg"></i>
+        <app-icon [icon]="icons.LogOut" [size]="18" className="block"></app-icon>
         Cerrar sesión
       </button>
     </div>
@@ -65,9 +65,9 @@
     <header class="lg:hidden flex items-center gap-4 bg-white border-b border-gray-200 px-4 py-3">
       <button type="button" (click)="toggleSidebar()"
               class="text-gray-700 hover:text-gray-900 transition-colors">
-        <i class="ti ti-menu-2 text-2xl"></i>
+        <app-icon [icon]="icons.Menu" [size]="24" className="block" iconTitle="Abrir menú"></app-icon>
       </button>
-      <img src="/logo.svg" alt="Gym App logo" class="w-6 h-6" />
+      <img src="/logo.svg" alt="Gym App logo" class="w-6 h-6" decoding="async" />
       <span class="font-semibold text-gray-900">Gym App</span>
     </header>
 
@@ -80,7 +80,7 @@
     </div>
 
     <!-- Router content -->
-    <main class="flex-1 p-4 lg:p-6 overflow-auto">
+    <main class="flex-1 p-4 lg:p-6 overflow-auto overscroll-contain">
       <router-outlet />
     </main>
 

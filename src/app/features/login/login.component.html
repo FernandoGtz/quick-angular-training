@@ -3,7 +3,7 @@
 
     <div class="mb-8 text-center">
       <!-- Application logo -->
-      <img src="/logo.svg" alt="Gym App logo" class="mx-auto w-32 h-32" />
+      <img src="/logo.svg" alt="Gym App logo" class="mx-auto w-32 h-32" decoding="async" />
       <h2 class="text-3xl font-bold text-gray-900">
         Iniciar sesión
       </h2>
@@ -23,12 +23,12 @@
           placeholder="correo@ejemplo.com"
         />
 
-        @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+        @if (emailCtrl.touched && emailCtrl.invalid) {
           <p class="text-coral-600 text-sm mt-1">
-            @if (loginForm.get('email')?.errors?.['required']) {
+            @if (emailCtrl.hasError('required')) {
               El email es requerido
             }
-            @if (loginForm.get('email')?.errors?.['email']) {
+            @if (emailCtrl.hasError('email')) {
               Formato de email inválido
             }
           </p>
@@ -47,9 +47,9 @@
           placeholder="******"
         />
 
-        @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+        @if (passwordCtrl.touched && passwordCtrl.invalid) {
           <p class="text-coral-600 text-sm mt-1">
-            @if (loginForm.get('password')?.errors?.['required']) {
+            @if (passwordCtrl.hasError('required')) {
               La contraseña es requerida
             }
           </p>
@@ -65,19 +65,20 @@
       </div>
 
       <!-- Global error -->
-      @if (errorMessage) {
+      @if (errorMessage()) {
         <div class="bg-coral-50 text-coral-700 border border-coral-200 p-3 rounded-lg text-sm">
-          {{ errorMessage }}
+          {{ errorMessage() }}
         </div>
       }
 
       <!-- Button -->
       <button
         type="submit"
-        [disabled]="loading"
-        class="w-full bg-brand-500 hover:bg-brand-600 text-white py-2 rounded-lg font-semibold transition disabled:opacity-50"
+        [disabled]="loading()"
+        class="w-full bg-brand-500 hover:bg-brand-600 text-white py-2 rounded-lg font-semibold transition disabled:opacity-50 flex items-center justify-center gap-2"
       >
-        {{ loading ? 'Ingresando...' : 'Entrar' }}
+        <app-icon [icon]="LogIn" [size]="18" className="block"></app-icon>
+        {{ loading() ? 'Ingresando...' : 'Entrar' }}
       </button>
 
     </form>

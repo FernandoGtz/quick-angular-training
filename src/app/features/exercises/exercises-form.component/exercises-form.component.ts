@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { Exercise } from '../../../core/models/exercise.model';
 import { ToastService } from '../../../core/services/toast.service';
+import { IconComponent } from '../../../layout/icon/icon.component';
+import Save from 'lucide/dist/esm/icons/save.mjs';
 
 /*
  * Exercises form component.
@@ -14,8 +16,9 @@ import { ToastService } from '../../../core/services/toast.service';
 @Component({
   standalone: true,
   selector: 'app-exercises-form.component',
-  imports: [ReactiveFormsModule, FormsModule],
-  templateUrl: './exercises-form.component.html'
+  imports: [ReactiveFormsModule, FormsModule, IconComponent],
+  templateUrl: './exercises-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExercisesFormComponent implements OnInit {
   // Injection of the service and the form
@@ -29,6 +32,13 @@ export class ExercisesFormComponent implements OnInit {
   public exerciseForm!: FormGroup;
   public currentId: string | null = null;
   public isEditMode: boolean = false;
+
+  /* Exposed icon reference for the template. */
+  protected readonly Save = Save;
+
+  /* Shortcuts to the form controls used in the template. */
+  get nameCtrl() { return this.exerciseForm.get('name')!; }
+  get targetMuscleCtrl() { return this.exerciseForm.get('targetMuscle')!; }
 
   /*
    * Initializes the form and, when an id is present in the route,

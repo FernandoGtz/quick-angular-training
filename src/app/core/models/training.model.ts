@@ -21,4 +21,7 @@ export interface TrainingView {
   description: string;
   partnerName: string;
   exerciseNames: string[];
+  /* Pre-computed joined label used in the template to avoid calling
+   * Array.join() on every change-detection cycle. */
+  exerciseNamesLabel: string;
 }

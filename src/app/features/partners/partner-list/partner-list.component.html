@@ -3,7 +3,7 @@
   @if (partners$ | async; as partners) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       @for (partner of partners; track partner.id) {
-        <div class="flex flex-col hover:shadow-md transition-shadow duration-200 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex flex-col transition-transform duration-200 hover:-translate-y-0.5 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div>
             <p class="text-sm font-medium text-gray-500">Nombre:
               <span class="text-base font-semibold text-gray-900 block">{{ partner.name }}</span>
@@ -16,7 +16,7 @@
           </div>
           <div>
             <p class="text-sm font-medium text-gray-500">Fecha de nacimiento:
-              <span class="text-base font-semibold text-gray-900 block">{{ partner.bornDate?.toDate() | date:'dd/MM/yyyy' }}</span>
+               <span class="text-base font-semibold text-gray-900 block">{{ partner.bornDate | timestampDate | date:'dd/MM/yyyy' }}</span>
             </p>
           </div>
           <div>
@@ -30,12 +30,18 @@
             </p>
           </div>
           <div class="mt-auto pt-4 flex gap-2 justify-end ">
-            <a class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+            <a class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer flex items-center gap-1.5
                     bg-brand-500 text-white hover:bg-brand-600"
-               [routerLink]="['/partners/edit', partner.id]">Editar</a>
-            <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
+               [routerLink]="['/partners/edit', partner.id]">
+              <app-icon [icon]="icons.Pencil" [size]="16" className="block"></app-icon>
+              Editar
+            </a>
+            <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer flex items-center gap-1.5
                     bg-coral-500 text-white hover:bg-coral-600"
-                    type="button" (click)="deletePartner(partner.id)">Borrar</button>
+                    type="button" (click)="deletePartner(partner.id)">
+              <app-icon [icon]="icons.Trash2" [size]="16" className="block"></app-icon>
+              Borrar
+            </button>
           </div>
         </div>
       } @empty {

@@ -1,11 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PartnerService } from '../../../core/services/partner.service';
 import { GenderPipe } from '../../../core/pipes/gender.pipe';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Training } from '../../../core/models/training.model';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Partner } from '../../../core/models/partner.model';
 import { ToastService } from '../../../core/services/toast.service';
+import { IconComponent } from '../../../layout/icon/icon.component';
+import Save from 'lucide/dist/esm/icons/save.mjs';
 
 /*
  * Partner form component.
@@ -16,8 +17,9 @@ import { ToastService } from '../../../core/services/toast.service';
 @Component({
   standalone: true,
   selector: 'app-partner-form',
-  imports: [ReactiveFormsModule, GenderPipe],
-  templateUrl: './partner-form.component.html'
+  imports: [ReactiveFormsModule, GenderPipe, IconComponent],
+  templateUrl: './partner-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartnerFormComponent implements OnInit {
   // Injection of the service and the form
@@ -31,6 +33,15 @@ export class PartnerFormComponent implements OnInit {
   public partnerForm!: FormGroup;
   public currentId: string | null = null;
   public isEditMode: boolean = false;
+
+  /* Exposed icon reference for the template. */
+  protected readonly Save = Save;
+
+  /* Shortcuts to the form controls used in the template. */
+  get nameCtrl() { return this.partnerForm.get('name')!; }
+  get emailCtrl() { return this.partnerForm.get('email')!; }
+  get genderCtrl() { return this.partnerForm.get('gender')!; }
+  get bornDateCtrl() { return this.partnerForm.get('bornDate')!; }
 
   /*
    * Initializes the form and, when an id is present in the route,
