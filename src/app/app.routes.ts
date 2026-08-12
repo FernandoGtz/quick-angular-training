@@ -10,6 +10,13 @@ import { LoginComponent } from './features/login/login.component';
 import { authGuard } from './core/guards/auth.guard';
 import { SignUpComponent } from './features/sign-up/sign-up.component';
 
+/*
+ * Application route table.
+ * Defines the public routes (login and sign-up) and the protected
+ * dashboard section (guarded by authGuard) with the CRUD routes for
+ * trainings, partners and exercises, including their new/edit pages.
+ * Any unknown path is redirected to the dashboard root.
+ */
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignUpComponent },
@@ -19,17 +26,17 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'trainings', pathMatch: 'full' },
-      // Rutas para entrenamientos
+      // Routes for trainings
       { path: 'trainings', component: TrainingListComponent },
       { path: 'trainings/new', component: TrainingFormComponent },
       { path: 'trainings/edit/:id', component: TrainingFormComponent },
 
-      // Rutas para socios
+      // Routes for partners
       { path: 'partners', component: PartnerListComponent },
       { path: 'partners/new', component: PartnerFormComponent },
       { path: 'partners/edit/:id', component: PartnerFormComponent },
 
-      // Rutas para ejercicios
+      // Routes for exercises
       { path: 'exercises', component: ExercisesListComponent },
       { path: 'exercises/new', component: ExercisesFormComponent },
       { path: 'exercises/edit/:id', component: ExercisesFormComponent },

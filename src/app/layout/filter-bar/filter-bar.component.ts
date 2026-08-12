@@ -3,16 +3,25 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
+/*
+ * Interface that describes a navigation filter option.
+ */
 interface FilterOption {
   label: string;
   route: string;
 }
 
+/*
+ * Interface that describes the navigation configuration of a section.
+ */
 interface SectionConfig {
   list: FilterOption;
   new: FilterOption;
 }
 
+/*
+ * Static navigation configuration for each CRUD section.
+ */
 const SECTIONS: Record<string, SectionConfig> = {
   trainings: {
     list: { label: 'Entrenamientos', route: '/trainings' },
@@ -28,6 +37,12 @@ const SECTIONS: Record<string, SectionConfig> = {
   },
 };
 
+/*
+ * Filter bar component.
+ * Shows the "list" and "new" navigation actions of the section that
+ * matches the current URL, keeping the navigation in sync with the
+ * router events through a signal.
+ */
 @Component({
   selector: 'app-filter-bar',
   standalone: true,
@@ -42,6 +57,7 @@ export class FilterBarComponent {
     { initialValue: this.router.url }
   );
 
+  /* Returns the section configuration matching the current URL or null. */
   section = computed(() => {
     const url = this.url();
     if (url.includes('trainings')) return SECTIONS['trainings'];

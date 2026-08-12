@@ -8,6 +8,13 @@ import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
 
+/*
+ * Partner list component.
+ * Displays the active partners in a table using an observable stream,
+ * and handles the deletion flow through a confirmation modal, informing
+ * the user whether the partner could be removed or is still referenced
+ * by trainings.
+ */
 @Component({
   standalone: true,
   selector: 'app-partner-list',
@@ -16,26 +23,35 @@ import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-mod
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PartnerListComponent implements OnInit {
-  // Inyeccion del servicio
+  // Service injection
   private partnerService = inject(PartnerService);
   private toastService = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
 
-  // Observable de partners
+  // Observable of partners
   public partners$: Observable<Partner[]> | undefined;
   public isModalOpen: boolean = false;
   public selectedId: string = '';
 
+  /* Initializes the observable of partners from the service. */
   ngOnInit() {
-    // Inicializacion
+    // Initialization
     this.partners$ = this.partnerService.getPartners();
   }
 
+  /*
+   * Opens the confirmation modal for the partner selected to be deleted.
+   */
   deletePartner(id: string): void {
     this.selectedId = id;
     this.isModalOpen = true;
   }
 
+  /*
+   * Executes the deletion of the selected partner.
+   * Closes the modal and shows a toast indicating whether the partner
+   * was deleted or the operation was blocked by associated trainings.
+   */
   async executeDelete() {
     try {
       const result = await this.partnerService.deletePartner(this.selectedId);
@@ -52,7 +68,7 @@ export class PartnerListComponent implements OnInit {
 
       this.selectedId = '';
     } catch (error) {
-      console.error('Error al eliminar el socio:', error);
+      console.error('Error deleting the partner:', error);
     }
   }
 }

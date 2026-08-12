@@ -11,6 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Training } from '../../../core/models/training.model';
 import { ToastService } from '../../../core/services/toast.service';
 
+/*
+ * Training form component.
+ * Provides a reactive form to create and edit trainings. It loads the
+ * active exercises and partners for the selects and, in edit mode,
+ * pre-fills the form with the existing training data.
+ */
 @Component({
   standalone: true,
   selector: 'app-training-form',
@@ -32,6 +38,10 @@ export class TrainingFormComponent implements OnInit {
   public currentId: string | null = null;
   public isEditMode: boolean = false;
 
+  /*
+   * Initializes the form, loads the available exercises and partners,
+   * and in edit mode pre-fills the form with the training data.
+   */
   ngOnInit() {
     this.trainingForm = this.formBuilder.group({
       partnerId: ['', Validators.required],
@@ -47,43 +57,48 @@ export class TrainingFormComponent implements OnInit {
         if (training) {
           this.trainingForm.patchValue(training);
         } else {
-          console.error('Entrenamiento no encontrado.');
+          console.error('Training not found.');
         }
       }).catch((error) => {
-        console.error('Error conectando a firestore', error)
+        console.error('Error connecting to Firestore', error)
       })
     }
   }
 
+  /*
+   * Handles the form submission.
+   * Updates the existing training in edit mode or creates a new one
+   * (adding the creation date), then redirects to the trainings list.
+   */
   async onSubmit() {
-    // Intentamos la creacion de un entrenamiento con el formulario validado
+    // Try to create a training with the validated form
     if (this.trainingForm.valid) {
       try {
-        // Llamada al servicio para crear el entrenamiento
+        // Call the service to create the training
         const formData = this.trainingForm.value;
 
         if (this.isEditMode) {
-          // Se realiza la actualizacion del documento partiendo del id y los valores del formulario
+          // Update the document using the id and the form values
           await this.trainingService.updateTraining(this.currentId, this.trainingForm.value);
-          console.log('Actualizado.');
+          console.log('Updated.');
         } else {
-          // Asignamos la fecha de creacion al payload
+          // Assign the creation date to the payload
           const createdAt = new Date();
           const payload = { ...formData, createdAt };
           const docId = await this.trainingService.createTraining(payload);
 
-          console.log('Creado: ', docId);
+          console.log('Created: ', docId);
         }
         this.toastService.showToast('Entrenamiento guardado correctamente.');
-        // Limpiamos el formulario
+        // Clear the form
         this.trainingForm.reset();
         await this.router.navigate(['/trainings']);
       } catch (error) {
-        console.error('Problema al contactar con Firestore:', error);
+        console.error('Problem contacting Firestore:', error);
       }
     } else {
       this.trainingForm.markAllAsTouched();
-      console.warn('El formulario tiene errores.');
+      console.warn('The form has errors.');
     }
   }
 }

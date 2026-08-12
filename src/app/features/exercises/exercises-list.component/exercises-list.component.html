@@ -44,7 +44,7 @@
 
 </div>
 
-<!-- Modal confirmar delete -->
+<!-- Modal to confirm the deletion -->
 <app-confirm-modal
   [isOpen]="isModalOpen"
   title="Eliminar Ejercicio"
@@ -53,12 +53,12 @@
   (cancel)="isModalOpen = false"
 />
 
-<!-- Modal ejercicios archivados -->
+<!-- Archived exercises modal -->
 @if (isArchivedModalOpen) {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
     <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 p-6">
 
-      <!-- Header del modal -->
+      <!-- Modal header -->
       <div class="flex justify-between items-center mb-2">
         <h3 class="text-lg font-semibold text-slate-800">Ejercicios archivados</h3>
         <button type="button" (click)="isArchivedModalOpen = false"
@@ -71,7 +71,7 @@
         Selecciona un ejercicio para reactivarlo en el sistema.
       </p>
 
-      <!-- Lista de archivados -->
+      <!-- Archived list -->
       @if (archivedExercises$ | async; as archived) {
         @if (archived.length > 0) {
           <ul class="divide-y divide-slate-100 max-h-72 overflow-y-auto">

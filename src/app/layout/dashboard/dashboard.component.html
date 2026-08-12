@@ -1,6 +1,6 @@
 <div class="flex h-screen bg-gray-100 overflow-hidden">
 
-  <!-- Overlay (solo mobile cuando sidebar está abierto) -->
+  <!-- Overlay (mobile only, when the sidebar is open) -->
   @if (isSidebarOpen) {
     <div class="fixed inset-0 z-20 bg-black/50 lg:hidden"
          (click)="closeSidebar()">
@@ -17,7 +17,7 @@
     <!-- Logo -->
     <div class="flex items-center justify-between px-6 py-4">
       <span class="text-white font-semibold text-lg">Gym App</span>
-      <!-- Botón cerrar en mobile -->
+      <!-- Close button on mobile -->
       <button type="button" (click)="closeSidebar()"
               class="lg:hidden text-slate-400 hover:text-white transition-colors">
         <i class="ti ti-x text-xl"></i>
@@ -55,10 +55,10 @@
 
   </aside>
 
-  <!-- Contenido principal -->
+  <!-- Main content -->
   <div class="flex-1 flex flex-col overflow-hidden">
 
-    <!-- Header mobile con hamburger -->
+    <!-- Mobile header with hamburger button -->
     <header class="lg:hidden flex items-center gap-4 bg-white border-b border-slate-200 px-4 py-3">
       <button type="button" (click)="toggleSidebar()"
               class="text-slate-600 hover:text-slate-800 transition-colors">
@@ -67,7 +67,7 @@
       <span class="font-semibold text-slate-800">Gym App</span>
     </header>
 
-    <!-- Header con título y filter bar (visible siempre) -->
+    <!-- Header with title and filter bar (always visible) -->
     <div class="bg-white border-b border-slate-200 px-6 pt-6 pb-0">
       <h1 class="text-xl lg:text-2xl font-semibold text-slate-800 mb-4">
         Sistema de Administración de Entrenamientos

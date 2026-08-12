@@ -3,6 +3,11 @@ import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { map, take } from 'rxjs';
 
+/*
+ * Route guard that protects the dashboard section.
+ * Checks the current Firebase auth state and allows navigation only
+ * when a user is authenticated; otherwise it redirects to the login page.
+ */
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -10,12 +15,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   return authService.authState$.pipe(
     take(1),
     map((user) => {
-      // Evaluamos si el objeto user esta autenticado
+      // Evaluate whether the user object is authenticated
       if (user) {
-        // Si es asi lo mantenemos
+        // If so, keep the navigation
         return true;
       } else {
-        // Si no, lo redirigimos al login
+        // If not, redirect the user to the login page
         router.navigate(['/login']);
         return false;
       }

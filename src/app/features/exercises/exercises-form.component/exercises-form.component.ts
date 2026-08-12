@@ -5,6 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Exercise } from '../../../core/models/exercise.model';
 import { ToastService } from '../../../core/services/toast.service';
 
+/*
+ * Exercises form component.
+ * Provides a reactive form to create and edit exercises. In edit mode it
+ * loads the existing exercise data and submits create/update operations
+ * to the ExerciseService.
+ */
 @Component({
   standalone: true,
   selector: 'app-exercises-form.component',
@@ -12,20 +18,24 @@ import { ToastService } from '../../../core/services/toast.service';
   templateUrl: './exercises-form.component.html'
 })
 export class ExercisesFormComponent implements OnInit {
-  // Inyeccion del servicio y el formulario
+  // Injection of the service and the form
   private exerciseService = inject(ExerciseService);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute)
   private toastService = inject(ToastService);
   private router = inject(Router);
 
-  //Formulario reactivo
+  // Reactive form
   public exerciseForm!: FormGroup;
   public currentId: string | null = null;
   public isEditMode: boolean = false;
 
+  /*
+   * Initializes the form and, when an id is present in the route,
+   * switches to edit mode and pre-fills the form with the exercise data.
+   */
   ngOnInit() {
-    // Inicializacion del formulario
+    // Form initialization
     this.exerciseForm = this.formBuilder.group({
       name: ['', Validators.required],
       targetMuscle: ['', Validators.required],
@@ -37,37 +47,42 @@ export class ExercisesFormComponent implements OnInit {
         if (exercise) {
           this.exerciseForm.patchValue(exercise);
         } else {
-          console.error('Ejercicio no encontrado: ', exercise);
+          console.error('Exercise not found: ', exercise);
         }
       }).catch((error) => {
-        console.error('Error conectando a firestore', error);
+        console.error('Error connecting to Firestore', error);
       })
     }
   }
 
+  /*
+   * Handles the form submission.
+   * Updates the existing exercise in edit mode or creates a new one,
+   * then redirects to the exercises list.
+   */
   async onSubmit() {
-    // Intentamos la creacion de nuevo ejercicio con el formulario validado
+    // Try to create a new exercise with the validated form
     if (this.exerciseForm.valid) {
       try {
-        // Llamada al servicio para crear el ejercicio
+        // Call the service to create the exercise
         const formData = this.exerciseForm.value;
 
         if (this.isEditMode) {
           await this.exerciseService.updateExercise(this.currentId, this.exerciseForm.value);
-          console.log('Actualizado');
+          console.log('Updated');
         } else {
           const docId = await this.exerciseService.createExercise(formData);
-          console.log('Creado: ', docId);
+          console.log('Created: ', docId);
         }
         this.toastService.showToast('Ejercicio guardado correctamente.');
         await this.router.navigate(['/exercises']);
         this.exerciseForm.reset();
       } catch (error) {
-        console.error('Problema al conectar con Firestore', error);
+        console.error('Problem connecting to Firestore', error);
       }
     } else {
       this.exerciseForm.markAllAsTouched();
-      console.warn('El formulario tiene errores.');
+      console.warn('The form has errors.');
     }
   }
 }

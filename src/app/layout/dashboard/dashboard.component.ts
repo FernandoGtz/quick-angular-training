@@ -3,6 +3,12 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { AuthService } from '../../core/services/auth.service';
 import { FilterBarComponent } from '../filter-bar/filter-bar.component';
 
+/*
+ * Dashboard layout component.
+ * Provides the authenticated shell of the application: a responsive
+ * sidebar navigation, a filter bar, and the RouterOutlet that renders
+ * the child routes. Also handles the logout action.
+ */
 @Component({
   standalone: true,
   selector: 'app-dashboard',
@@ -10,27 +16,33 @@ import { FilterBarComponent } from '../filter-bar/filter-bar.component';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
-  // Inyectamos el servicio para emplear el cierre de sesión
+  // Inject the service to handle the logout
   private authService = inject(AuthService);
   private router = inject(Router);
 
   public isSidebarOpen: boolean = false;
 
-  // Metodo para el cierre de sesión
+  /*
+   * Logs the user out and redirects to the login page.
+   */
   async logout() {
     this.authService.logout();
     this.router.navigate(['login']);
   }
 
+  /* Toggles the sidebar visibility (mobile). */
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
+  /* Closes the sidebar. */
   closeSidebar() {
     this.isSidebarOpen = false;
   }
 
-  // Cierra el sidebar si se redimensiona a desktop
+  /*
+   * Closes the sidebar when the window is resized to desktop width.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     if (window.innerWidth >= 1024) {

@@ -3,6 +3,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 
+/*
+ * Login component.
+ * Renders a reactive form to authenticate an existing user through the
+ * AuthService and redirects to the dashboard on success. Shows a global
+ * error message when the credentials are invalid.
+ */
 @Component({
   standalone: true,
   selector: 'app-login',
@@ -10,17 +16,18 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-  // Inyeccion de servicio, formulario y enrutador
+  // Injection of the form builder, the auth service and the router
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
 
   public loginForm!: FormGroup;
 
-  // Variables
+  // Component state
   errorMessage: string | null = null;
   loading = false;
 
+  /* Initializes the reactive form with its validators. */
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,9 +35,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // Metodo para el boton iniciar sesion
+  /*
+   * Handles the login button.
+   * Marks the form as touched if it is invalid; otherwise calls the auth
+   * service, redirects to the dashboard and shows errors on failure.
+   */
   async onSubmit() {
-    // Si el formulario no es
+    // If the form is invalid
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -44,10 +55,10 @@ export class LoginComponent implements OnInit {
     try {
       await this.authService.login(email!, password!);
 
-      // Redirección
+      // Redirection
       await this.router.navigate(['/']);
     } catch (error) {
-      console.error('Error de login:', error);
+      console.error('Login error:', error);
       this.errorMessage = 'Credenciales inválidas';
     } finally {
       this.loading = false;

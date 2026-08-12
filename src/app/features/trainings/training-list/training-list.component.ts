@@ -9,6 +9,12 @@ import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast.service';
 import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-modal.component';
 
+/*
+ * Training list component.
+ * Combines the trainings, partners and exercises observables to build a
+ * denormalized TrainingView list, and handles the deletion flow through
+ * a confirmation modal.
+ */
 @Component({
   standalone: true,
   selector: 'app-training-list',
@@ -17,50 +23,62 @@ import { ConfirmModalComponent } from '../../../layout/confirm-modal/confirm-mod
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrainingListComponent implements OnInit {
-  // Inyeccion del servicio
+  // Service injection
   private trainingService = inject(TrainingService);
   private partnerService = inject(PartnerService);
   private exerciseService = inject(ExerciseService);
   private toastService = inject(ToastService);
 
-  // Observable de trainings
+  // Observable of trainings
   public trainingsView$: Observable<TrainingView[]> | undefined;
   public isModalOpen: boolean = false;
   public selectedId: string = '';
 
+  /*
+   * Builds the TrainingView stream.
+   * combineLatest receives an array of observables and each emission is
+   * mapped into a readable list where partner ids and exercise ids are
+   * replaced with their names.
+   */
   ngOnInit() {
-    // combineLatest recibe un arreglo de observables
+    // combineLatest receives an array of observables
     this.trainingsView$ = combineLatest([
       this.trainingService.getTrainings(),
       this.partnerService.getPartners(),
       this.exerciseService.getAllExercises(),
     ]).pipe(
-      // El map extrae los tres arreglos resultantes en el mismo orden
+      // map extracts the three resulting arrays in the same order
       map(([trainings, partners, exercises]) => {
         return trainings.map((training) => {
-          const partnerEncontrado = partners.find((partner) => partner.id === training.partnerId);
+          const foundPartner = partners.find((partner) => partner.id === training.partnerId);
 
-          const nombresEjercicios = training.exercisesIds.map((exerciseId) => {
-            const exerciseEncontrado = exercises.find((exercise) => exercise.id === exerciseId);
-            return exerciseEncontrado ? exerciseEncontrado.name : 'Ejercicio eliminado';
+          const exerciseNames = training.exercisesIds.map((exerciseId) => {
+            const foundExercise = exercises.find((exercise) => exercise.id === exerciseId);
+            return foundExercise ? foundExercise.name : 'Ejercicio eliminado';
           });
 
           return {
             id: training.id,
             description: training.description,
-            partnerName: partnerEncontrado ? partnerEncontrado.name : 'Socio eliminado',
-            exerciseNames: nombresEjercicios,
+            partnerName: foundPartner ? foundPartner.name : 'Socio eliminado',
+            exerciseNames,
           };
         });
       }),
     );
   }
 
+  /*
+   * Opens the confirmation modal for the training selected to be deleted.
+   */
   deleteTraining(id: string): void {
     this.selectedId = id;
     this.isModalOpen = true;
   }
 
+  /*
+   * Executes the deletion of the selected training and closes the modal.
+   */
   async executeDelete() {
     try {
       await this.trainingService.deleteTraining(this.selectedId);
@@ -68,7 +86,7 @@ export class TrainingListComponent implements OnInit {
       this.toastService.showToast('Entrenamiento eliminado correctamente.');
       this.selectedId = '';
     } catch (error) {
-      console.error('Error al eliminar el entrenamiento:', error);
+      console.error('Error deleting the training:', error);
     }
   }
 }
