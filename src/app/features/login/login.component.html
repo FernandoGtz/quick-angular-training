@@ -1,7 +1,9 @@
-<div class="min-h-screen flex items-center justify-center bg-slate-900">
-  <div class="w-full max-w-md bg-gray-100 p-8 rounded-2xl shadow-lg">
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-md border border-gray-200">
 
     <div class="mb-8 text-center">
+      <!-- Application logo -->
+      <img src="/logo.svg" alt="Gym App logo" class="mx-auto w-32 h-32" />
       <h2 class="text-3xl font-bold text-gray-900">
         Iniciar sesión
       </h2>
@@ -11,18 +13,18 @@
 
       <!-- Email -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
+        <label class="block text-sm font-medium text-gray-500 mb-1">
           Email
         </label>
         <input
           type="email"
           formControlName="email"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none placeholder:text-gray-400"
           placeholder="correo@ejemplo.com"
         />
 
         @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
-          <p class="text-red-500 text-sm mt-1">
+          <p class="text-coral-600 text-sm mt-1">
             @if (loginForm.get('email')?.errors?.['required']) {
               El email es requerido
             }
@@ -35,18 +37,18 @@
 
       <!-- Password -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
+        <label class="block text-sm font-medium text-gray-500 mb-1">
           Contraseña
         </label>
         <input
           type="password"
           formControlName="password"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:outline-none placeholder:text-gray-400"
           placeholder="******"
         />
 
         @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-          <p class="text-red-500 text-sm mt-1">
+          <p class="text-coral-600 text-sm mt-1">
             @if (loginForm.get('password')?.errors?.['required']) {
               La contraseña es requerida
             }
@@ -56,7 +58,7 @@
 
       <div class="mt-6 text-center text-sm text-gray-600">
         <p>¿No estás registrado?
-          <a routerLink="/sign-up" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+          <a routerLink="/sign-up" class="font-medium text-brand-600 hover:text-brand-500 transition-colors">
             Crea un usuario.
           </a>
         </p>
@@ -64,7 +66,7 @@
 
       <!-- Global error -->
       @if (errorMessage) {
-        <div class="bg-red-100 text-red-700 p-3 rounded-lg text-sm">
+        <div class="bg-coral-50 text-coral-700 border border-coral-200 p-3 rounded-lg text-sm">
           {{ errorMessage }}
         </div>
       }
@@ -73,7 +75,7 @@
       <button
         type="submit"
         [disabled]="loading"
-        class="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50"
+        class="w-full bg-brand-500 hover:bg-brand-600 text-white py-2 rounded-lg font-semibold transition disabled:opacity-50"
       >
         {{ loading ? 'Ingresando...' : 'Entrar' }}
       </button>

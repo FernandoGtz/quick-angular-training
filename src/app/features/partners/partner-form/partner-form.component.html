@@ -1,45 +1,45 @@
 <div class="max-w-2xl mx-auto">
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-    <h2 class="text-xl font-semibold text-slate-800 mb-6">
+  <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">
       Registro de Socio
     </h2>
     <form [formGroup]="partnerForm" (ngSubmit)="onSubmit()" class="space-y-5">
 
       <!-- Name -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Nombre</label>
-        <input type="text" formControlName="name" class="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-800
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                 placeholder:text-slate-400" />
+        <label class="block text-sm font-medium text-gray-500 mb-1">Nombre</label>
+        <input type="text" formControlName="name" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
+                 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+                 placeholder:text-gray-400" />
         @if (partnerForm.get('name')?.hasError('required') && partnerForm.get('name')?.touched) {
-          <span class="text-red-400 text-sm">El nombre es obligatorio</span>
+          <span class="text-coral-600 text-sm">El nombre es obligatorio</span>
         }
       </div>
 
       <!-- Email -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Correo electrónico</label>
-        <input type="email" formControlName="email" class="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-800
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                 placeholder:text-slate-400" />
+        <label class="block text-sm font-medium text-gray-500 mb-1">Correo electrónico</label>
+        <input type="email" formControlName="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
+                 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+                 placeholder:text-gray-400" />
         @if (partnerForm.get('email')?.hasError('required') && partnerForm.get('email')?.touched) {
-          <span class="text-red-400 text-sm">El email es obligatorio</span>
+          <span class="text-coral-600 text-sm">El email es obligatorio</span>
         }
       </div>
 
       <!-- Phone -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Número telefónico</label>
-        <input type="number" formControlName="cellphoneNumber" class="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-800
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                 placeholder:text-slate-400" />
+        <label class="block text-sm font-medium text-gray-500 mb-1">Número telefónico</label>
+        <input type="number" formControlName="cellphoneNumber" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
+                 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+                 placeholder:text-gray-400" />
       </div>
 
       <!-- Gender -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Género</label>
-        <select formControlName="gender" class="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-800
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <label class="block text-sm font-medium text-gray-500 mb-1">Género</label>
+        <select formControlName="gender" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
+                 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
           <option value="" disabled>Selecciona...</option>
           @for (opt of genderOptions; track opt) {
             <option [value]="opt">{{ opt | gender }}</option>
@@ -47,23 +47,21 @@
         </select>
 
         @if (partnerForm.get('gender')?.hasError('required') && partnerForm.get('gender')?.touched) {
-          <span class="text-red-400 text-sm">Requerido</span>
+          <span class="text-coral-600 text-sm">Requerido</span>
         }
       </div>
 
       <!-- Date -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">Fecha de nacimiento</label>
-        <input type="date" formControlName="bornDate" class="w-full px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-800
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                 placeholder:text-slate-400" />
-        @if (partnerForm.get('bornDate')?.errors?.['required'] && partnerForm.get('bornDate')?.touched) { <span class="text-red-400 text-sm">Requerido</span> }
+        <label class="block text-sm font-medium text-gray-500 mb-1">Fecha de nacimiento</label>
+        <input type="date" formControlName="bornDate" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900
+                 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+                 placeholder:text-gray-400" />
+        @if (partnerForm.get('bornDate')?.errors?.['required'] && partnerForm.get('bornDate')?.touched) { <span class="text-coral-600 text-sm">Requerido</span> }
       </div>
 
       <!-- Button -->
-      <button type="submit" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium
-               rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">Guardar Socio</button>    </form>
+      <button type="submit" class="w-full py-2.5 px-4 bg-brand-500 hover:bg-brand-600 text-white font-medium
+               rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">Guardar Socio</button>    </form>
   </div>
 </div>
-
-

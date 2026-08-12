@@ -1,9 +1,9 @@
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 min-h-full p-8">
-  <h2 class="text-2xl font-bold mb-4 text-slate-800"> Lista de Socios</h2>
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 min-h-full p-8">
+  <h2 class="text-2xl font-bold mb-4 text-gray-900"> Lista de Socios</h2>
   @if (partners$ | async; as partners) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       @for (partner of partners; track partner.id) {
-        <div class="flex flex-col hover:shadow-lg transition-shadow duration-200 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+        <div class="flex flex-col hover:shadow-md transition-shadow duration-200 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div>
             <p class="text-sm font-medium text-gray-500">Nombre:
               <span class="text-base font-semibold text-gray-900 block">{{ partner.name }}</span>
@@ -31,10 +31,10 @@
           </div>
           <div class="mt-auto pt-4 flex gap-2 justify-end ">
             <a class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
-                    bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800"
+                    bg-brand-500 text-white hover:bg-brand-600"
                [routerLink]="['/partners/edit', partner.id]">Editar</a>
             <button class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 cursor-pointer
-                    bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800"
+                    bg-coral-500 text-white hover:bg-coral-600"
                     type="button" (click)="deletePartner(partner.id)">Borrar</button>
           </div>
         </div>
@@ -44,16 +44,7 @@
     </div>
   } @else {
     <div class="flex justify-center p-8">
-      <p class="text-blue-500 font-semibold animate-pulse">Cargando datos...</p>
+      <p class="text-gray-500 font-semibold animate-pulse">Cargando datos...</p>
     </div>
   }
 </div>
-
-<!-- Modal to confirm the deletion -->
-<app-confirm-modal
-  [isOpen]="isModalOpen"
-  title="Eliminar Socio"
-  message="¿Estás seguro de que deseas eliminar este socio?"
-  (confirm)="executeDelete()"
-  (cancel)="isModalOpen = false"
-/>

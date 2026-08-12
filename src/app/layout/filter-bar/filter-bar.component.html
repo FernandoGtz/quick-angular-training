@@ -2,16 +2,16 @@
   <div class="flex items-center gap-2">
 
     <a [routerLink]="section()!.list.route"
-       routerLinkActive="border-b-2 border-blue-500 text-blue-500"
+       routerLinkActive="border-b-2 border-brand-500 text-brand-600"
        [routerLinkActiveOptions]="{ exact: true }"
-       class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+       class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
       {{ section()!.list.label }}
     </a>
 
     <a [routerLink]="section()!.new.route"
-       routerLinkActive="border-b-2 border-blue-500 text-blue-500"
+       routerLinkActive="border-b-2 border-brand-500 text-brand-600"
        [routerLinkActiveOptions]="{ exact: true }"
-       class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+       class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
       {{ section()!.new.label }}
     </a>
 

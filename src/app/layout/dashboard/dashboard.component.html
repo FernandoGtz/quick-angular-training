@@ -8,7 +8,7 @@
   }
 
   <!-- Sidebar -->
-  <aside class="fixed inset-y-0 left-0 z-30 w-64 min-h-screen bg-slate-900 text-white flex flex-col px-1 py-4 gap-2
+  <aside class="fixed inset-y-0 left-0 z-30 w-64 min-h-screen bg-gradient-to-b from-brand-700 via-brand-800 to-brand-950 text-white flex flex-col px-1 py-4 gap-2
                 transform transition-transform duration-300 ease-in-out
                 lg:relative lg:translate-x-0"
          [class.translate-x-0]="isSidebarOpen"
@@ -16,30 +16,33 @@
 
     <!-- Logo -->
     <div class="flex items-center justify-between px-6 py-4">
-      <span class="text-white font-semibold text-lg">Gym App</span>
+      <div class="flex items-center gap-2">
+        <img src="/logo.svg" alt="Gym App logo" class="w-16 h-16" />
+        <span class="text-white font-semibold text-lg">Gym App</span>
+      </div>
       <!-- Close button on mobile -->
       <button type="button" (click)="closeSidebar()"
-              class="lg:hidden text-slate-400 hover:text-white transition-colors">
+              class="lg:hidden text-gray-300 hover:text-white transition-colors">
         <i class="ti ti-x text-xl"></i>
       </button>
     </div>
 
     <nav class="flex-1 p-4 space-y-2">
-      <a routerLink="trainings" routerLinkActive="bg-slate-700 text-white"
+      <a routerLink="trainings" routerLinkActive="bg-white/10 text-white"
          (click)="closeSidebar()"
-         class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">
+         class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
         <i class="ti ti-barbell text-lg"></i>
         Entrenamientos
       </a>
-      <a routerLink="exercises" routerLinkActive="bg-slate-700 text-white"
+      <a routerLink="exercises" routerLinkActive="bg-white/10 text-white"
          (click)="closeSidebar()"
-         class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">
+         class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
         <i class="ti ti-dumbbell text-lg"></i>
         Ejercicios
       </a>
-      <a routerLink="partners" routerLinkActive="bg-slate-700 text-white"
+      <a routerLink="partners" routerLinkActive="bg-white/10 text-white"
          (click)="closeSidebar()"
-         class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer">
+         class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
         <i class="ti ti-users text-lg"></i>
         Socios
       </a>
@@ -47,7 +50,7 @@
 
     <div class="w-full flex items-center justify-center gap-2 px-4 py-2 mt-auto">
       <button type="button" (click)="logout()"
-              class="flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-950 hover:text-red-300 transition-colors w-full">
+              class="flex items-center gap-3 px-3 py-2 rounded-lg text-coral-300 hover:bg-coral-950 hover:text-coral-200 transition-colors w-full">
         <i class="ti ti-logout text-lg"></i>
         Cerrar sesión
       </button>
@@ -59,17 +62,18 @@
   <div class="flex-1 flex flex-col overflow-hidden">
 
     <!-- Mobile header with hamburger button -->
-    <header class="lg:hidden flex items-center gap-4 bg-white border-b border-slate-200 px-4 py-3">
+    <header class="lg:hidden flex items-center gap-4 bg-white border-b border-gray-200 px-4 py-3">
       <button type="button" (click)="toggleSidebar()"
-              class="text-slate-600 hover:text-slate-800 transition-colors">
+              class="text-gray-700 hover:text-gray-900 transition-colors">
         <i class="ti ti-menu-2 text-2xl"></i>
       </button>
-      <span class="font-semibold text-slate-800">Gym App</span>
+      <img src="/logo.svg" alt="Gym App logo" class="w-6 h-6" />
+      <span class="font-semibold text-gray-900">Gym App</span>
     </header>
 
     <!-- Header with title and filter bar (always visible) -->
-    <div class="bg-white border-b border-slate-200 px-6 pt-6 pb-0">
-      <h1 class="text-xl lg:text-2xl font-semibold text-slate-800 mb-4">
+    <div class="bg-white border-b border-gray-200 px-6 pt-6 pb-0">
+      <h1 class="text-xl lg:text-2xl font-semibold text-gray-900 mb-4">
         Sistema de Administración de Entrenamientos
       </h1>
       <app-filter-bar />
